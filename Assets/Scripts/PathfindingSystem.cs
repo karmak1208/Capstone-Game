@@ -19,6 +19,21 @@ public class Node
 
 public class PathfindingSystem : MonoBehaviour
 {
+
+    public static PathfindingSystem Instance { get; private set; }
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
     [SerializeField] Tilemap tilemap;
     private BoundsInt bounds;
     public Dictionary<Vector3Int, Node> nodes = new Dictionary<Vector3Int, Node>();
