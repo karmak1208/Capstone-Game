@@ -172,7 +172,6 @@ public class PathfindingSystem : MonoBehaviour
 
         path.Add(startNode.Position);
         path.Reverse();
-        Debug.Log($"Path found: {path}");
         return path;
     }
 

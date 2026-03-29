@@ -122,7 +122,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CapstoneTemporarySpriteSheet_Player
+      name: CapstoneTemporarySpriteSheet_Player1
       rect:
         serializedVersion: 2
         x: 32
@@ -174,7 +174,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -183,6 +183,72 @@ TextureImporter:
       bones: []
       spriteID: 7075f864c8d56c14aadec631228d4d61
       internalID: 895529967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapstoneTemporarySpriteSheet_Player2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbc918d03176c7c41be985c6879622fc
+      internalID: 1202814225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapstoneTemporarySpriteSheet_Player3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b7645c21e3a78545a63dbe463fc52a4
+      internalID: -1089147704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapstoneTemporarySpriteSheet_Player4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45f87de5fc4044a41a2a09e931e06ae4
+      internalID: -332817595
       vertices: []
       indices: 
       edges: []
@@ -202,7 +268,10 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       CapstoneTemporarySpriteSheet_Floor_1: -6885980034003544619
-      CapstoneTemporarySpriteSheet_Player: -1200538002
+      CapstoneTemporarySpriteSheet_Player1: -1200538002
+      CapstoneTemporarySpriteSheet_Player2: 1202814225
+      CapstoneTemporarySpriteSheet_Player3: -1089147704
+      CapstoneTemporarySpriteSheet_Player4: -332817595
       CapstoneTemporarySpriteSheet_TileHighlight: 895529967
       CapstoneTemporarySpriteSheet_Wall_1: 492683826
   mipmapLimitGroupName: 

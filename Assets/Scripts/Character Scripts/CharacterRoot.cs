@@ -20,6 +20,7 @@ public class CharacterRoot : MonoBehaviour
     }
     public Vector3 Position => transform.position;
     public string CharacterName = "Unnamed";
+    public Sprite CharacterSprite;
 
     public void SetActive(bool isActive)
     {
@@ -27,6 +28,8 @@ public class CharacterRoot : MonoBehaviour
         // (We don't stop mid-path — the character finishes their current move.)
         if (Movement != null)
             Movement.SetInputEnabled(isActive);
+        if (Highlighter != null)
+            Highlighter.SetActive(isActive);
 
         // You could also show/hide a selection ring, outline, etc. here.
     }

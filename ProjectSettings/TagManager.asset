@@ -41,5 +41,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 2517018975
+    locked: 0
+  - name: Characters
+    uniqueID: 3179777903
+    locked: 0
+  - name: Vision
+    uniqueID: 411512153
+    locked: 0
+  - name: Fog
+    uniqueID: 2091725505
+    locked: 0
+  - name: UI
+    uniqueID: 4120017919
+    locked: 0
   m_RenderingLayers:
   - Default

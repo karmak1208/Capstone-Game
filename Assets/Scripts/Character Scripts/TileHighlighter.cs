@@ -12,13 +12,27 @@ public class TileHighlighter : MonoBehaviour
     private List<Vector3Int> highlightedCells = new List<Vector3Int>();
     private Vector3Int mouseCellPos;
 
+    private CharacterRoot Root;
+    private bool isActive = false;
+
     void Awake()
     {
         highlightMap.gameObject.SetActive(false);
     }
 
+    public void SetActive(bool active)
+    {
+        isActive = active;
+        if (!isActive)
+        {
+            ClearHighlight();
+        }
+    }
+
     void Start()
     {
+        Root = GetComponent<CharacterRoot>();
+
         foreach (Vector3Int pos in highlightMap.cellBounds.allPositionsWithin)
         {
             if (highlightMap.HasTile(pos))
@@ -65,20 +79,23 @@ public class TileHighlighter : MonoBehaviour
 
     void Update()
     {
-        CharacterRoot root = GetComponent<CharacterRoot>();
-        if (root.Movement.isMoving) return; // Don't update highlight while character is moving
+        if (!isActive) return; // Don't update if not active
+        if (Root.Movement.inputEnabled == false) // Don't update highlight if input is disabled
+        {
+            ClearHighlight();
+            return; 
+        }
+
+        if (Root.Movement.isMoving) return; // Don't update highlight while character is moving
 
         Vector3Int newMouseCellPos = GetMouseCellPosition();
         if (newMouseCellPos != mouseCellPos)
         {
             ClearHighlight();
             mouseCellPos = newMouseCellPos;
-            CharacterRoot active = CharacterManager.Instance?.ActiveCharacter;
-            if (active != null)
-            {
-                Vector3Int characterCellPos = floormap.WorldToCell(active.Position);
-                HighlightPath(characterCellPos, mouseCellPos);
-            }
+            
+            Vector3Int characterCellPos = floormap.WorldToCell(Root.Position);
+            HighlightPath(characterCellPos, mouseCellPos);
         }
     }
 }
