@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6986486687263367022}
   - component: {fileID: 8866700053138795358}
   - component: {fileID: 3607533568812207849}
+  - component: {fileID: -8843681028906091472}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -200,7 +201,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   floormap: {fileID: 0}
-  moveSpeed: 5
+  moveSpeed: 284.4
   movementRange: 10
   isMoving: 0
   tileSize: 1
@@ -219,3 +220,16 @@ MonoBehaviour:
   floormap: {fileID: 0}
   highlightMap: {fileID: 0}
   tileSize: 1
+--- !u!114 &-8843681028906091472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847509848120060856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03312c75cdbbc34b948911c7c560698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  cardPrefab: {fileID: 4955835389366214823, guid: e3792be83157d244b852ba81c8fffecd, type: 3}
