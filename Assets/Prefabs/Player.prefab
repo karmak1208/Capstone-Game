@@ -201,7 +201,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   floormap: {fileID: 0}
-  moveSpeed: 284.4
+  moveSpeed: 10
   movementRange: 10
   isMoving: 0
   tileSize: 1

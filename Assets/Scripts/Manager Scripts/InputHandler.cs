@@ -117,7 +117,21 @@ public class InputHandler : MonoBehaviour
         if (heldCard != null)
         {
             Debug.Log("[INPUT] Card released - dropping");
-            active?.Inventory.CardReleased(heldCard);
+            Vector3Int releaseCellPos = floormap.WorldToCell(mousePos);
+            Vector2 hotbarViewportStart = new Vector2(0.1f, 0f);
+            Vector2 hotbarViewportEnd = new Vector2(0.9f, 0.3f);
+            Vector2 viewportPos = Camera.main.ScreenToViewportPoint(Mouse.current.position.ReadValue());
+            if ((viewportPos.x >= hotbarViewportStart.x && viewportPos.x <= hotbarViewportEnd.x &&
+                viewportPos.y >= hotbarViewportStart.y && viewportPos.y <= hotbarViewportEnd.y) || releaseCellPos == null)
+            {
+                Debug.Log("[INPUT] Card released over hotbar or invalid cell, returning to inventory");
+                active?.Inventory.CardReleased(heldCard);
+            }
+            else if (releaseCellPos != null)
+            {
+                active?.Inventory.CardReleasedAtPosition(heldCard, releaseCellPos);
+            }
+
             heldCard = null; // clear cache
         }
     }

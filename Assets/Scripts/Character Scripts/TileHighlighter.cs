@@ -14,6 +14,8 @@ public class TileHighlighter : MonoBehaviour
 
     private CharacterRoot Root;
     private bool isActive = false;
+    private float updateInterval = 0.1f; // Update every 0.1 seconds
+    private float timeSinceLastUpdate = 0f;
 
     void Awake()
     {
@@ -89,13 +91,14 @@ public class TileHighlighter : MonoBehaviour
         if (Root.Movement.isMoving) return; // Don't update highlight while character is moving
 
         Vector3Int newMouseCellPos = GetMouseCellPosition();
-        if (newMouseCellPos != mouseCellPos)
+        if (newMouseCellPos != mouseCellPos && timeSinceLastUpdate >= updateInterval)
         {
             ClearHighlight();
             mouseCellPos = newMouseCellPos;
-            
+            timeSinceLastUpdate = 0f;
             Vector3Int characterCellPos = floormap.WorldToCell(Root.Position);
             HighlightPath(characterCellPos, mouseCellPos);
         }
+        timeSinceLastUpdate += Time.deltaTime;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.U2D.Animation;
 using UnityEngine;
 
 
@@ -11,10 +12,12 @@ public class InventoryManager : MonoBehaviour
     private List<GameObject> activeCards = new List<GameObject>();
     private GameObject heldCard;
 
-    private Vector2 hotbarStartPos = new Vector2(0.3f, 0.1f);
+    private Vector2 hotbarOrigin = new Vector2(0.5f, 0.1f);
+    private Vector2 hotbarStartPos;
 
     async void Start()
     {
+        hotbarStartPos = hotbarOrigin;
         characterData = await CardLoader.Instance?.LoadObject<CharacterData>((string)(GetComponent<CharacterRoot>().CharacterName + "Data"));
     }
 
@@ -62,18 +65,40 @@ public class InventoryManager : MonoBehaviour
     Vector3 GetCardHotbarHome(int index)
     {
         CardHandler handler = activeCards[index].GetComponent<CardHandler>();
-        Vector3 baseWorldPos = Camera.main.ViewportToWorldPoint(new Vector3(hotbarStartPos.x, hotbarStartPos.y, 10f));
-        baseWorldPos.z = 0;
-        float spacing = handler.cardSize.x;
-        return baseWorldPos + new Vector3(spacing * index, 0, 0);
+        float cardWidth = handler.cardSize.x;
+        float spacing = cardWidth + 0.1f * (Camera.main.orthographicSize / 5f); // scale gap with zoom too
+        float totalWidth = spacing * activeCards.Count - spacing + cardWidth; // span of all cards
+
+        // Convert viewport origin to world
+        Vector3 originWorld = Camera.main.ViewportToWorldPoint(new Vector3(hotbarOrigin.x, hotbarOrigin.y, 10f));
+        originWorld.z = 0f;
+
+        float startX = originWorld.x - totalWidth / 2f;
+        float cardCenterOffsetX = cardWidth / 2f; // align by card center
+        return new Vector3(startX + cardCenterOffsetX + spacing * index, originWorld.y, 0f);
     }
 
     GameObject CreateCard(string itemName)
     {
         GameObject card = Instantiate(cardPrefab);
-        card.GetComponent<CardHandler>().Initialize(itemName);
+        card.GetComponent<CardHandler>().Initialize(itemName, gameObject);
         activeCards.Add(card);
         return card;
+    }
+
+    public void RemoveCardFromInventory(GameObject card)
+    {
+        if (activeCards.Contains(card))
+        {
+            activeCards.Remove(card);
+            string itemName = card.GetComponent<CardHandler>().ItemName;
+            int itemCount = characterData.inventory[itemName];
+            itemCount--;
+            if (itemCount <= 0)
+            {
+                characterData.inventory.Remove(itemName);
+            }
+        }
     }
 
     public void CardHeld(Collider2D held)
@@ -84,6 +109,13 @@ public class InventoryManager : MonoBehaviour
 
     public void CardReleased(Collider2D released)
     {
+        released.GetComponent<CardHandler>()?.FollowCursor(false);
+        heldCard = null;
+    }
+
+    public void CardReleasedAtPosition(Collider2D released, Vector3Int cellPos)
+    {
+        released.GetComponent<CardHandler>()?.UseCard(cellPos);
         released.GetComponent<CardHandler>()?.FollowCursor(false);
         heldCard = null;
     }
