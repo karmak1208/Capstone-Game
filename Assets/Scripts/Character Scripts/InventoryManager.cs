@@ -80,8 +80,8 @@ public class InventoryManager : MonoBehaviour
 
     GameObject CreateCard(string itemName)
     {
-        GameObject card = Instantiate(cardPrefab);
-        card.GetComponent<CardHandler>().Initialize(itemName, gameObject);
+        GameObject card = Instantiate(cardPrefab, transform);
+        card.GetComponent<CardHandler>().Initialize(itemName);
         activeCards.Add(card);
         return card;
     }

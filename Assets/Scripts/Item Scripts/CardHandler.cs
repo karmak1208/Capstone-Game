@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,14 +10,12 @@ public class CardHandler : MonoBehaviour
     Vector2 offsetFromCursor => new Vector2(cardSize.x / 2, cardSize.y / 2);
     GameObject CardItem;
     public string ItemName;
-    GameObject creator;
-
-    public async void Initialize(string itemName, GameObject _creator)
+    public async void Initialize(string itemName)
     {
-        creator = _creator;
         CardData cardSO = await CardLoader.Instance?.LoadObject<CardData>(itemName);
         GameObject cardPrefab = await CardLoader.Instance?.LoadObject<GameObject>(cardSO.itemName + "Prefab");
         CardItem = Instantiate(cardPrefab, transform);
+        CardItem.GetComponent<CardAction>()?.Initialize(cardSO);
         ItemName = cardSO.itemName;
         CardItem.transform.position = transform.position;
     }
@@ -52,13 +51,16 @@ public class CardHandler : MonoBehaviour
     public void UseCard(Vector3Int cellPos)
     {
         Debug.Log($"[CARD] Using card: {CardItem.name} at position {cellPos}");
-        CardItem.GetComponent<CardAction>()?.ExecuteAction(cellPos);
+        CardItem.GetComponent<CardAction>()?.ExecuteAction(cellPos, false);
     }
 
     public void DestroyCard()
     {
-        transform.DetachChildren();
-        creator.GetComponent<InventoryManager>()?.RemoveCardFromInventory(gameObject);
+        foreach (Transform child in transform.Cast<Transform>().ToList())
+        {
+            child.SetParent(transform.parent);
+        }
+        transform.parent.GetComponent<InventoryManager>()?.RemoveCardFromInventory(gameObject);
         Destroy(gameObject);
     }
 } 

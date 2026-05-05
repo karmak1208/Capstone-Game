@@ -4,6 +4,8 @@ using UnityEngine;
 public class CardData : ScriptableObject
 {
     public string itemName;
-    public Sprite itemIcon;
     public CardAction cardAction;
+
+    public float damage;
+    public int cooldown;
 }

@@ -328,7 +328,7 @@ TextureImporter:
         width: 32
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -350,7 +350,7 @@ TextureImporter:
         width: 32
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -359,6 +359,72 @@ TextureImporter:
       bones: []
       spriteID: d3a90342d8d103345979c5b2661fd0b4
       internalID: -479976773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapstoneTemporarySpriteSheet_Enemy
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0180ff27dbb88a419e0f6ab0c70ea3d
+      internalID: -2099787755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapstoneTemporarySpriteSheet_Pawn_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d0797234e4d3a94b8708adb1b56a4f8
+      internalID: 1486536990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapstoneTemporarySpriteSheet_Pawn_2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 131f8b450f7440c46bfad13640fdf028
+      internalID: 1946882455
       vertices: []
       indices: 
       edges: []
@@ -381,8 +447,11 @@ TextureImporter:
       CapstoneTemporarySpriteSheet_Bow: 2111858070
       CapstoneTemporarySpriteSheet_Dagger: 2121638810
       CapstoneTemporarySpriteSheet_Empty_Card: -1688128810
+      CapstoneTemporarySpriteSheet_Enemy: -2099787755
       CapstoneTemporarySpriteSheet_Floor_1: -6885980034003544619
       CapstoneTemporarySpriteSheet_HealthPotion: -479976773
+      CapstoneTemporarySpriteSheet_Pawn_1: 1486536990
+      CapstoneTemporarySpriteSheet_Pawn_2: 1946882455
       CapstoneTemporarySpriteSheet_Player1: -1200538002
       CapstoneTemporarySpriteSheet_Player2: 1202814225
       CapstoneTemporarySpriteSheet_Player3: -1089147704

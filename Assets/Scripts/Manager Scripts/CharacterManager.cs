@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class CharacterManager : MonoBehaviour
 {
@@ -17,23 +18,24 @@ public class CharacterManager : MonoBehaviour
     }
 
     [Header("Party Setup")]
-    [SerializeField] private List<CharacterRoot> _partyMembers;
+    [SerializeField] private List<CharacterRoot> partyMembers;
+    public TextMeshProUGUI characterNameDisplay;
+    public TextMeshProUGUI moveRangeText;
+
     public CharacterRoot ActiveCharacter { get; private set; }
 
     public void SwitchTo(CharacterRoot newCharacter)
     {
-        // Guard: if this character is already active, do nothing.
         if (newCharacter == ActiveCharacter) return;
 
         // Deactivate the OLD character (stop accepting input, hide selection ring, etc.)
         if (ActiveCharacter != null)
             ActiveCharacter.SetActive(false);
 
-        // Assign the new active character.
         ActiveCharacter = newCharacter;
-
-        // Activate the NEW character (resume input, show selection ring, etc.)
         ActiveCharacter.SetActive(true);
+        characterNameDisplay.text = ActiveCharacter.CharacterName;
+        moveRangeText.text = $"Move Range: {ActiveCharacter.Movement.remainingMovementRange}";
 
         Debug.Log($"[CharacterManager] Switched to: {ActiveCharacter.CharacterName}");
     }

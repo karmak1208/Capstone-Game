@@ -33,19 +33,25 @@ public class PathfindingSystem : MonoBehaviour
         }
     }
 
-    [SerializeField] Tilemap tilemap;
+    [SerializeField] Tilemap floormap;
+    [SerializeField] Tilemap wallmap;
     private BoundsInt bounds;
     public Dictionary<Vector3Int, Node> nodes = new Dictionary<Vector3Int, Node>();
 
     void Start()
     {
-        bounds = tilemap.cellBounds;
+        bounds = floormap.cellBounds;
         foreach (Vector3Int pos in bounds.allPositionsWithin)
         {
-            if (!tilemap.HasTile(pos)) continue; // Skip empty tiles
-            bool isWalkable = true; // All tiles are walkable
-            nodes[pos] = new Node(pos, isWalkable);
+            nodes[pos] = new Node(pos, IsTileWalkable(pos));
         }
+    }
+    
+    bool IsTileWalkable(Vector3Int pos)
+    {
+        bool hasFloor = floormap.HasTile(pos);
+        bool hasWall = wallmap.HasTile(pos);
+        return hasFloor && !hasWall; 
     }
 
     private List<Node> GetNeighbors(Node node)
