@@ -10,6 +10,7 @@ public class CardHandler : MonoBehaviour
     Vector2 offsetFromCursor => new Vector2(cardSize.x / 2, cardSize.y / 2);
     GameObject CardItem;
     public string ItemName;
+    public string ItemType;
     public async void Initialize(string itemName)
     {
         CardData cardSO = await CardLoader.Instance?.LoadObject<CardData>(itemName);
@@ -17,6 +18,7 @@ public class CardHandler : MonoBehaviour
         CardItem = Instantiate(cardPrefab, transform);
         CardItem.GetComponent<CardAction>()?.Initialize(cardSO);
         ItemName = cardSO.itemName;
+        ItemType = cardSO.itemType;
         CardItem.transform.position = transform.position;
     }
     public void FollowCursor(bool active)

@@ -5,7 +5,7 @@ using UnityEditor.U2D.Animation;
 using UnityEngine;
 
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : MonoBehaviour, IResettable
 {
     public GameObject cardPrefab;
     private CharacterData characterData;
@@ -14,6 +14,9 @@ public class InventoryManager : MonoBehaviour
 
     private Vector2 hotbarOrigin = new Vector2(0.5f, 0.1f);
     private Vector2 hotbarStartPos;
+
+    public int TimesAttackedThisTurn { get; set; } = 0;
+    public int MaxAttacksPerTurn { get; set; } = 1;
 
     async void Start()
     {
@@ -28,6 +31,10 @@ public class InventoryManager : MonoBehaviour
             if (activeCards[i] == heldCard) continue; // Skip updating position for the card currently being held
             activeCards[i].transform.position = GetCardHotbarHome(i);
         }
+    }
+    public void StartTurnReset()
+    {
+        TimesAttackedThisTurn = 0;
     }
 
     public void SetActive(bool active)
@@ -115,8 +122,20 @@ public class InventoryManager : MonoBehaviour
 
     public void CardReleasedAtPosition(Collider2D released, Vector3Int cellPos)
     {
-        released.GetComponent<CardHandler>()?.UseCard(cellPos);
+        string cardType = released.GetComponent<CardHandler>()?.ItemType;
+        if (cardType == "Weapon")
+        {
+            if (TimesAttackedThisTurn < MaxAttacksPerTurn)
+            {
+                released.GetComponent<CardHandler>()?.UseCard(cellPos);
+                TimesAttackedThisTurn++;
+            }
+            else { Debug.Log($"[INV] Cannot use {released.name} - max attacks per turn reached."); }
+        }
+        else { released.GetComponent<CardHandler>()?.UseCard(cellPos); }
+
         released.GetComponent<CardHandler>()?.FollowCursor(false);
         heldCard = null;
     }
+
 }

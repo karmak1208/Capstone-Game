@@ -23,7 +23,21 @@ public class CharacterRoot : MonoBehaviour
         {
             Debug.LogError("CharacterRoot requires an InventoryManager component.");
         }
+
+
+        TurnManager.Instance.OnTurnStart.AddListener(OnTurnStarted);
+        TurnManager.Instance.OnTurnEnd.AddListener(OnTurnEnded);
     }
+
+    private void OnDestroy()
+    {
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnTurnStart.RemoveListener(OnTurnStarted);
+            TurnManager.Instance.OnTurnEnd.RemoveListener(OnTurnEnded);
+        }
+    }
+
     public Vector3 Position => transform.position;
     public string CharacterName = "Unnamed";
     public Sprite CharacterSprite;
@@ -37,6 +51,21 @@ public class CharacterRoot : MonoBehaviour
             Highlighter.SetActive(isActive);
         if (Inventory != null)
             Inventory.SetActive(isActive);
+    }
+
+    void OnTurnStarted(int turn)
+    {
+        Movement.StartTurnReset();
+    }
+
+    void OnTurnEnded()
+    {
+        SetActive(false);
+        foreach(var component in GetComponents<IResettable>())
+        {
+            component.StartTurnReset();
+        }
+        
     }
 }
 

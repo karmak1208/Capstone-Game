@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   itemName: Sword
+  itemType: Weapon
   cardAction: {fileID: 544821547518713989, guid: 17907483e44818244887e26981cc3d50, type: 3}
   damage: 10
   cooldown: 1
+  range: 0

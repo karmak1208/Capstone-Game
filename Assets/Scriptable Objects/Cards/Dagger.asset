@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: Dagger
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   itemName: Dagger
-  itemIcon: {fileID: 2121638810, guid: 48eac4c4cac94cb469694b9750a15974, type: 3}
-  cardAction: {fileID: 0}
+  itemType: Weapon
+  cardAction: {fileID: 3832007898411518271, guid: a4f2dda00a02e704d97d9b2e0d77687b, type: 3}
+  damage: 10
+  cooldown: 1
+  range: 1

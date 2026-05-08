@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1008525646010164146}
   - component: {fileID: 1405485723970277964}
+  - component: {fileID: 3832007898411518271}
   m_Layer: 0
   m_Name: DaggerPrefab
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 8864406471215120453}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.58151, y: -0.26113, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -174949377
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 6
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2121638810, guid: 48eac4c4cac94cb469694b9750a15974, type: 3}
@@ -91,3 +92,40 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &3832007898411518271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8864406471215120453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55bae801f0e3c8e419df7912af0a9495, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DaggerAction
+  stabCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.008921315
+      outSlope: 0.008921315
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0
+      outWeight: 0.9991776
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 210.09657
+      outSlope: 210.09657
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.009432673
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 0
+    m_RotationOrder: 4
+  stabSpeed: 3

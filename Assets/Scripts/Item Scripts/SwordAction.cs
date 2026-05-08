@@ -22,7 +22,7 @@ public class SwordAction : CardAction
         isSwinging = true;
         swingTimer = 0f;
 
-        yield return StartCoroutine(SwingCoroutine(direction, parentPos)); ;
+        yield return StartCoroutine(SwingCoroutine(direction, parentPos));
     }
     Vector2 RotateBy(Vector2 v, float degrees)
     {

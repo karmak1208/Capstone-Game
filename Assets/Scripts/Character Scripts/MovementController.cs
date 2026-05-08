@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class MovementController : MonoBehaviour
+public class MovementController : MonoBehaviour, IResettable
 {
     [Header("Components")]
     public Rigidbody2D rb;
@@ -79,5 +79,17 @@ public class MovementController : MonoBehaviour
             Root.Highlighter.SetCellVisible(tile, false); // Hide the tile highlight after reaching it
         }
         isMoving = false;
+    }
+
+    public void StartTurnReset()
+    {
+        ResetMovementRange();
+    }
+
+    private void ResetMovementRange()
+    {
+        remainingMovementRange = maxMovementRange;
+        moveRangeText.text = $"Move Range: {remainingMovementRange}";
+        Debug.Log($"[MOVEMENT] Movement range reset for {Root.CharacterName}. Remaining Range: {remainingMovementRange}");
     }
 }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8866700053138795358}
   - component: {fileID: 3607533568812207849}
   - component: {fileID: -8843681028906091472}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -201,8 +201,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   floormap: {fileID: 0}
+  moveRangeText: {fileID: 0}
   moveSpeed: 10
-  movementRange: 10
+  maxMovementRange: 0
+  remainingMovementRange: 0
   isMoving: 0
   tileSize: 1
 --- !u!114 &3607533568812207849
