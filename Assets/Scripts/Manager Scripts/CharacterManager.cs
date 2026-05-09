@@ -36,6 +36,10 @@ public class CharacterManager : MonoBehaviour
 
     public CharacterRoot ActiveCharacter { get; private set; }
 
+    /// <summary>
+    /// Switches the active character to the specified one. If the same character is selected again, it will be deselected.
+    /// </summary>
+    /// <param name="newCharacter">The character to switch to.</param>
     public void SwitchTo(CharacterRoot newCharacter)
     {
         if (newCharacter == ActiveCharacter)
@@ -56,6 +60,9 @@ public class CharacterManager : MonoBehaviour
         Debug.Log($"[CharacterManager] Switched to: {ActiveCharacter.CharacterName}");
     }
 
+    /// <summary>
+    /// Deselects the currently active character, if any. This will stop accepting input for that character and hide any selection indicators.
+    /// </summary>
     public void DeselectCharacter()
     {
         if (ActiveCharacter != null)

@@ -46,7 +46,12 @@ public class PathfindingSystem : MonoBehaviour
             nodes[pos] = new Node(pos, IsTileWalkable(pos));
         }
     }
-    
+
+    /// <summary>
+    /// Determines if a tile is walkable by checking if it has a floor tile and does not have a wall tile.
+    /// </summary>
+    /// <param name="pos">The position of the tile to check.</param>
+    /// <returns>True if the tile is walkable, false otherwise.</returns>
     bool IsTileWalkable(Vector3Int pos)
     {
         bool hasFloor = floormap.HasTile(pos);
@@ -54,6 +59,12 @@ public class PathfindingSystem : MonoBehaviour
         return hasFloor && !hasWall; 
     }
 
+    /// <summary>
+    /// Gets the neighboring nodes of a given node, considering both cardinal and diagonal directions.
+    /// Diagonal neighbors are only included if both adjacent cardinal neighbors are walkable to avoid clipping into walls during movement.
+    /// </summary>
+    /// <param name="node">The node for which to find neighbors.</param>
+    /// <returns>A list of neighboring nodes.</returns>
     private List<Node> GetNeighbors(Node node)
     {
         List<Node> neighbors = new List<Node>();
@@ -103,6 +114,12 @@ public class PathfindingSystem : MonoBehaviour
         return neighbors;
     }
 
+    /// <summary>
+    /// Finds a path from the start position to the target position using the A* algorithm.
+    /// </summary>
+    /// <param name="startPos">The starting position of the path.</param>
+    /// <param name="targetPos">The target position of the path.</param>
+    /// <returns>A list of positions representing the path, or null if no path is found.</returns>
     public List<Vector3Int> FindPath(Vector3Int startPos, Vector3Int targetPos)
     {
         if (!nodes.TryGetValue(startPos, out Node startNode) ||
@@ -164,6 +181,12 @@ public class PathfindingSystem : MonoBehaviour
         return null; // No path found
     }
 
+    /// <summary>
+    /// Retraces the path from the end node to the start node by following the parent references to construct the list of positions that form the path.
+    /// </summary>
+    /// <param name="startNode">The starting node of the path.</param>
+    /// <param name="endNode">The ending node of the path.</param>
+    /// <returns>A list of positions representing the path from start to end.</returns>
     private List<Vector3Int> RetracePath(Node startNode, Node endNode)
     {
         List<Vector3Int> path = new List<Vector3Int>();

@@ -11,6 +11,11 @@ public class CardHandler : MonoBehaviour
     GameObject CardItem;
     public string ItemName;
     public string ItemType;
+
+    /// <summary>
+    /// Initializes the card by loading the corresponding CardData and prefab based on the provided itemName.
+    /// </summary>
+    /// <param name="itemName">The name of the item to initialize the card with.</param>
     public async void Initialize(string itemName)
     {
         CardData cardSO = await CardLoader.Instance?.LoadObject<CardData>(itemName);
@@ -50,12 +55,19 @@ public class CardHandler : MonoBehaviour
         transform.localScale = new Vector3(scaleFactor, scaleFactor, 1);
     }
 
+    /// <summary>
+    /// Calls the ExecuteAction method on the CardAction component of the card's item, passing in the given cell position. 
+    /// </summary>
+    /// <param name="cellPos">The cell position where the card's effect should be applied.</param>
     public void UseCard(Vector3Int cellPos)
     {
         Debug.Log($"[CARD] Using card: {CardItem.name} at position {cellPos}");
         CardItem.GetComponent<CardAction>()?.ExecuteAction(cellPos, false);
     }
 
+    /// <summary>
+    /// Sets all child objects of the card to have their parent set to the card's parent, before destroying the card itself.
+    /// </summary>
     public void DestroyCard()
     {
         foreach (Transform child in transform.Cast<Transform>().ToList())

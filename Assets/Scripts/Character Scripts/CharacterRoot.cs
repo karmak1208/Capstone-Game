@@ -44,13 +44,10 @@ public class CharacterRoot : MonoBehaviour
 
     public void SetActive(bool isActive)
     {
-        // Tell the movement controller whether to accept new destinations.
-        if (Movement != null)
-            Movement.SetInputEnabled(isActive);
-        if (Highlighter != null)
-            Highlighter.SetActive(isActive);
-        if (Inventory != null)
-            Inventory.SetActive(isActive);
+        foreach (var component in GetComponents<IActivatable>())
+        {
+            component.SetActive(isActive);
+        }
     }
 
     void OnTurnStarted(int turn)

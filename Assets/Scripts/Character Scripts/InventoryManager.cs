@@ -5,7 +5,7 @@ using UnityEditor.U2D.Animation;
 using UnityEngine;
 
 
-public class InventoryManager : MonoBehaviour, IResettable
+public class InventoryManager : MonoBehaviour, IResettable, IActivatable
 {
     public GameObject cardPrefab;
     private CharacterData characterData;
@@ -69,6 +69,11 @@ public class InventoryManager : MonoBehaviour, IResettable
         }
     }
 
+    /// <summary>
+    /// Gets the world position for a card in the hotbar based on its index, centering the hotbar on the screen and spacing cards evenly. The spacing scales with camera zoom to maintain visual consistency.
+    /// </summary>
+    /// <param name="index">The index of the card in the hotbar.</param>
+    /// <returns>The world position for the card.</returns>
     Vector3 GetCardHotbarHome(int index)
     {
         CardHandler handler = activeCards[index].GetComponent<CardHandler>();
@@ -85,6 +90,11 @@ public class InventoryManager : MonoBehaviour, IResettable
         return new Vector3(startX + cardCenterOffsetX + spacing * index, originWorld.y, 0f);
     }
 
+    /// <summary>
+    /// Instantiate a card prefab, initialize it with the given item name, add it to the active cards list, and return the created card GameObject.
+    /// </summary>
+    /// <param name="itemName">The name of the item to initialize the card with.</param>
+    /// <returns>The created card GameObject.</returns>
     GameObject CreateCard(string itemName)
     {
         GameObject card = Instantiate(cardPrefab, transform);
@@ -93,16 +103,20 @@ public class InventoryManager : MonoBehaviour, IResettable
         return card;
     }
 
+    /// <summary>
+    /// Lowers card count, destroys the card GameObject if count reaches 0, and removes it from the inventory. If the card is not in the active cards list, it does nothing.
+    /// </summary>
+    /// <param name="card">The card GameObject to remove from the inventory.</param>
     public void RemoveCardFromInventory(GameObject card)
     {
         if (activeCards.Contains(card))
         {
-            activeCards.Remove(card);
             string itemName = card.GetComponent<CardHandler>().ItemName;
             int itemCount = characterData.inventory[itemName];
             itemCount--;
             if (itemCount <= 0)
             {
+                activeCards.Remove(card);
                 characterData.inventory.Remove(itemName);
             }
         }
@@ -114,12 +128,23 @@ public class InventoryManager : MonoBehaviour, IResettable
         heldCard = held.gameObject;
     }
 
+    /// <summary>
+    /// Returns the card to its hotbar position if it is released without being used.
+    /// </summary>
+    /// <param name="released">The collider of the card released</param>
     public void CardReleased(Collider2D released)
     {
         released.GetComponent<CardHandler>()?.FollowCursor(false);
         heldCard = null;
     }
 
+    /// <summary>
+    /// Activates the card's effect at the given cell position if it is released over a valid target. 
+    /// If the card is a weapon, it checks if the character can still attack this turn before using it. 
+    /// After using the card, it stops following the cursor and clears the heldCard reference.
+    /// </summary>
+    /// <param name="released">The collider of the card released</param>
+    /// <param name="cellPos">The cell position where the card is released</param>
     public void CardReleasedAtPosition(Collider2D released, Vector3Int cellPos)
     {
         string cardType = released.GetComponent<CardHandler>()?.ItemType;

@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 
-public class TileHighlighter : MonoBehaviour
+public class TileHighlighter : MonoBehaviour, IActivatable
 {
     [SerializeField] Tilemap floormap;
     [SerializeField] Tilemap highlightMap;
@@ -46,6 +46,7 @@ public class TileHighlighter : MonoBehaviour
         highlightMap.gameObject.SetActive(true);
     }
 
+    /// <summary>Sets the highlight tile at the given cell position to be visible at 0.5 opacity or invisible.</summary>
     public void SetCellVisible(Vector3Int cellPos, bool visible)
     {
         highlightMap.SetTileFlags(cellPos, TileFlags.None);

@@ -41,6 +41,10 @@ public class InputHandler : MonoBehaviour
         toggleMoveAction.performed += OnToggleMove;
     }
 
+    /// <summary>
+    /// Sets the isPressed flag to true and records the mouse position at the start of the click. 
+    /// This is used to determine if the player is dragging after a certain distance threshold is exceeded in the Update method.
+    /// </summary>
     private void OnPressStarted(InputAction.CallbackContext ctx)
     {
         isPressed = true;
@@ -61,6 +65,9 @@ public class InputHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles the release of the click. If the click was not a drag, calls DetermineAction.
+    /// </summary>
     private void OnPressReleased(InputAction.CallbackContext ctx)
     {
         if (isPressed && !isDragging)
@@ -80,9 +87,14 @@ public class InputHandler : MonoBehaviour
     {
         if (active == null) return;
         Debug.Log("Toggle Move Input action performed.");
-        active.Movement.SetInputEnabled(!active.Movement.inputEnabled);
+        active.Movement.SetActive(!active.Movement.inputEnabled);
     }
 
+    /// <summary>
+    /// Determines what action to take based on what the player clicked on. 
+    /// If they clicked on a character, it switches to that character. 
+    /// Else handles move input to move the active character to the clicked location.
+    /// </summary>
     void DetermineAction()
     {
         Collider2D hit = Physics2D.OverlapPoint(mousePos);
@@ -90,17 +102,15 @@ public class InputHandler : MonoBehaviour
         {
             SwitchCharacter(hit.GetComponent<CharacterRoot>());
         }
-        else if (hit != null && hit.CompareTag("Card"))
-        {
-            Debug.Log("[INPUT] Card clicked");
-            return;
-        }
         else
         {
             HandleMoveInput();
         }
     }
 
+    /// <summary>
+    /// Determines if the player is clicking on a card in their inventory to hold and drag. If so, it caches the held card and notifies the InventoryManager.
+    /// </summary>
     void DetermineHold()
     {
         Collider2D hit = Physics2D.OverlapPoint(mousePos);
@@ -112,6 +122,9 @@ public class InputHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Determines if the player is releasing a held card over a valid cell to drop it or over the hotbar/invalid cell to return it to the inventory. It then notifies the InventoryManager of the release and clears the held card cache.
+    /// </summary>
     void ReleaseHold()
     {
         if (heldCard != null)

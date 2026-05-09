@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class MovementController : MonoBehaviour, IResettable
+public class MovementController : MonoBehaviour, IResettable, IActivatable
 {
     [Header("Components")]
     public Rigidbody2D rb;
@@ -28,7 +28,7 @@ public class MovementController : MonoBehaviour, IResettable
         remainingMovementRange = maxMovementRange;
     }
 
-    public void SetInputEnabled(bool enabled)
+    public void SetActive(bool enabled)
     {
         inputEnabled = enabled;
         Debug.Log($"[MOVEMENT] Movement Input for {Root.CharacterName} set to: {inputEnabled}");
@@ -41,6 +41,10 @@ public class MovementController : MonoBehaviour, IResettable
         return false; // Temporarily return false
     }
 
+    /// <summary>
+    /// Starts the process of moving the character from its current cell position to the target tile position. 
+    /// If a valid path is found and it is within the remaining movement range, it starts MovePlayerAlongPath coroutine.
+    /// </summary>
     public void MoveTo(Vector3Int characterCellPos, Vector3Int targetTilePos)
     {
         Debug.Log($"[MOVEMENT] Attempting to move from {characterCellPos} to {targetTilePos} for {Root.CharacterName}.");
@@ -65,6 +69,11 @@ public class MovementController : MonoBehaviour, IResettable
         else { Debug.Log("[MOVEMENT] No valid path found to the target tile."); }
     }
 
+    /// <summary>
+    /// Moves the player along the given path list, which is a list of tile positions. 
+    /// It moves towards each tile in sequence, waiting until it reaches each tile before moving to the next one.
+    /// </summary>
+    /// <param name="pathList">The list of tile positions to move along.</param>
     public IEnumerator MovePlayerAlongPath(List<Vector3Int> pathList)
     {
         isMoving = true;
