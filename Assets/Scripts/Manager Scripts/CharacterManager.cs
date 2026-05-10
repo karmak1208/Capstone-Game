@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterManager : MonoBehaviour
 {
@@ -30,11 +31,15 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    [SerializeField] private List<CharacterRoot> partyMembers;
+    [SerializeField] private List<CharacterRoot> _partyMembers;
+    public List<CharacterRoot> PartyMembers { get => _partyMembers; private set => _partyMembers = value; }
     public TextMeshProUGUI characterNameDisplay;
     public TextMeshProUGUI moveRangeText;
 
     public CharacterRoot ActiveCharacter { get; private set; }
+
+    public UnityEvent OnCharacterStartedMove = new UnityEvent();
+    public UnityEvent OnCharacterEndedMove = new UnityEvent();
 
     /// <summary>
     /// Switches the active character to the specified one. If the same character is selected again, it will be deselected.

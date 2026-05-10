@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,6 +24,8 @@ public class TurnManager : MonoBehaviour
     public UnityEvent OnTurnEnd;
     public int CurrentTurn { get; private set; } = 1;
 
+    int _pending = 0;
+
     void Start()
     {
         StartTurn();
@@ -40,9 +43,17 @@ public class TurnManager : MonoBehaviour
 
     public void EndTurn()
     {
+        StartCoroutine(EndTurnRoutine());
+    }
+    private IEnumerator EndTurnRoutine()
+    {
         Debug.Log($"[TurnManager] Ending Turn {CurrentTurn}");
+        _pending = 0;
         OnTurnEnd?.Invoke();
+        yield return new WaitUntil(() => _pending <= 0);
         CurrentTurn++;
         StartTurn();
     }
+    public void RegisterEndTurnTask() => _pending++;
+    public void CompleteEndTurnTask() => _pending--;
 }

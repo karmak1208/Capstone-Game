@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class MovementController : MonoBehaviour, IResettable, IActivatable
@@ -20,6 +21,7 @@ public class MovementController : MonoBehaviour, IResettable, IActivatable
 
     public bool isMoving = false;
     [SerializeField] private int tileSize;
+
     public bool inputEnabled { get; private set; }
 
     private void Awake()
@@ -77,17 +79,20 @@ public class MovementController : MonoBehaviour, IResettable, IActivatable
     public IEnumerator MovePlayerAlongPath(List<Vector3Int> pathList)
     {
         isMoving = true;
+        CharacterManager.Instance.OnCharacterStartedMove.Invoke();
         foreach (Vector3Int tile in pathList)
         {
             // Keep moving each frame until we reach the tile
             while (transform.position != (Vector3)tile)
             {
                 transform.position = Vector3.MoveTowards(transform.position, tile, moveSpeed * Time.deltaTime);
+
                 yield return null; // Wait one frame, then continue the while loop
             }
             Root.Highlighter.SetCellVisible(tile, false); // Hide the tile highlight after reaching it
         }
         isMoving = false;
+        CharacterManager.Instance.OnCharacterEndedMove.Invoke();
     }
 
     public void StartTurnReset()

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1295629394020713614}
   - component: {fileID: -1444917308889773365}
   - component: {fileID: -3597591767237224982}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CardPrefab
   m_TagString: Card
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -174949377
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1904999207, guid: 48eac4c4cac94cb469694b9750a15974, type: 3}
@@ -133,6 +133,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cd95f264941882478f81f008762c5fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ItemName: 
+  ItemType: 
 --- !u!61 &-3597591767237224982
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 899053470754430724}
   - component: {fileID: 4505649609199736014}
   - component: {fileID: 544821547518713989}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SwordPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -174949377
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 6
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1540585271, guid: 48eac4c4cac94cb469694b9750a15974, type: 3}
@@ -171,7 +171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5070170369175739926}
   - component: {fileID: 5510146264371548854}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HitCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
