@@ -394,7 +394,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -416,7 +416,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -425,6 +425,28 @@ TextureImporter:
       bones: []
       spriteID: 131f8b450f7440c46bfad13640fdf028
       internalID: 1946882455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapstoneTemporarySpriteSheet_Arrow
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6ca0c4bda1e4c347987d36d505692be
+      internalID: -1654972153
       vertices: []
       indices: 
       edges: []
@@ -444,6 +466,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       CapstoneTemporarySpriteSheet_1: 548768923
+      CapstoneTemporarySpriteSheet_Arrow: -1654972153
       CapstoneTemporarySpriteSheet_Bow: 2111858070
       CapstoneTemporarySpriteSheet_Dagger: 2121638810
       CapstoneTemporarySpriteSheet_Empty_Card: -1688128810

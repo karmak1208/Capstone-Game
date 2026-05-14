@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bee78a5ef1e75f747b0667ba44ff2396, type: 3}
+  m_Name: Arrow
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  itemName: Arrow
+  itemType: Ammo
+  cardAction: {fileID: 1215955476648512569, guid: 64f412826f567c249a027f1f5a9772c4, type: 3}
+  damage: 10
+  cooldown: 0
+  range: 10

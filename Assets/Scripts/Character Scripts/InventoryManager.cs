@@ -1,35 +1,43 @@
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.U2D.Animation;
+using System.Linq;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 
 public class InventoryManager : MonoBehaviour, IResettable, IActivatable
 {
     public GameObject cardPrefab;
     private CharacterData characterData;
-    private List<GameObject> activeCards = new List<GameObject>();
+    public List<GameObject> ActiveCards = new List<GameObject>();
+    private Dictionary<string, GameObject> _cardLookup = new();
     private GameObject heldCard;
 
-    private Vector2 hotbarOrigin = new Vector2(0.5f, 0.1f);
+    private Vector2 hotbarOrigin = new Vector2(0.5f, 0.2f);
     private Vector2 hotbarStartPos;
 
-    public int TimesAttackedThisTurn { get; set; } = 0;
-    public int MaxAttacksPerTurn { get; set; } = 1;
+    public int TimesAttackedThisTurn = 0;
+    public int MaxAttacksPerTurn = 1;
 
     async void Start()
     {
         hotbarStartPos = hotbarOrigin;
         characterData = await CardLoader.Instance?.LoadObject<CharacterData>((string)(GetComponent<CharacterRoot>().CharacterName + "Data"));
+        if (characterData == null) { Debug.LogWarning("[INV] Character data not loaded. Cannot populate inventory."); return; }
+
+        foreach (var item in characterData.inventory)
+            for (int i = 0; i < item.Value; i++)
+            {
+                GameObject card = CreateCard(item.Key);
+                card.SetActive(false);
+            }
     }
 
     private void LateUpdate()
     {
-        for (int i = 0; i < activeCards.Count; i++)
+        for (int i = 0; i < ActiveCards.Count; i++)
         {
-            if (activeCards[i] == heldCard) continue; // Skip updating position for the card currently being held
-            activeCards[i].transform.position = GetCardHotbarHome(i);
+            if (ActiveCards[i] == heldCard) continue; // Skip updating position for the card currently being held
+            ActiveCards[i].transform.position = GetCardHotbarHome(i);
         }
     }
     public void StartTurnReset()
@@ -41,31 +49,20 @@ public class InventoryManager : MonoBehaviour, IResettable, IActivatable
     {
         if (active)
         {
-            if (characterData == null)
+            for (int i = 0; i < ActiveCards.Count; i++)
             {
-                Debug.LogWarning("[INV] Character data not loaded. Cannot populate inventory.");
-                return;
-            }
-            foreach (var item in characterData.inventory)
-            {
-                CreateCard(item.Key);
-            }
-
-            for (int i = 0; i < activeCards.Count; i++)
-            {
-                CardHandler handler = activeCards[i].GetComponent<CardHandler>();
+                ActiveCards[i].SetActive(true);
+                CardHandler handler = ActiveCards[i].GetComponent<CardHandler>();
                 handler.transform.position = GetCardHotbarHome(i);
-
-                Debug.Log($"[INV] Card {activeCards[i].name} positioned at {handler.transform.position}");
             }
         }
         else
         {
-            foreach (var card in activeCards)
+            foreach (var card in ActiveCards)
             {
-                Destroy(card);
+                card.SetActive(false);
             }
-            activeCards.Clear();
+            _cardLookup.Clear();
         }
     }
 
@@ -76,10 +73,10 @@ public class InventoryManager : MonoBehaviour, IResettable, IActivatable
     /// <returns>The world position for the card.</returns>
     Vector3 GetCardHotbarHome(int index)
     {
-        CardHandler handler = activeCards[index].GetComponent<CardHandler>();
+        CardHandler handler = ActiveCards[index].GetComponent<CardHandler>();
         float cardWidth = handler.cardSize.x;
         float spacing = cardWidth + 0.1f * (Camera.main.orthographicSize / 5f); // scale gap with zoom too
-        float totalWidth = spacing * activeCards.Count - spacing + cardWidth; // span of all cards
+        float totalWidth = spacing * ActiveCards.Count - spacing + cardWidth; // span of all cards
 
         // Convert viewport origin to world
         Vector3 originWorld = Camera.main.ViewportToWorldPoint(new Vector3(hotbarOrigin.x, hotbarOrigin.y, 10f));
@@ -97,9 +94,16 @@ public class InventoryManager : MonoBehaviour, IResettable, IActivatable
     /// <returns>The created card GameObject.</returns>
     GameObject CreateCard(string itemName)
     {
-        GameObject card = Instantiate(cardPrefab, transform);
+        if (_cardLookup.TryGetValue(itemName, out GameObject existing))
+        {
+            existing.GetComponent<CardHandler>().IncreaseItemAmountBy(1);
+            return existing;
+        }
+
+        var card = Instantiate(cardPrefab, transform);
+        _cardLookup[itemName] = card;
+        ActiveCards.Add(card);
         card.GetComponent<CardHandler>().Initialize(itemName);
-        activeCards.Add(card);
         return card;
     }
 
@@ -107,19 +111,21 @@ public class InventoryManager : MonoBehaviour, IResettable, IActivatable
     /// Lowers card count, destroys the card GameObject if count reaches 0, and removes it from the inventory. If the card is not in the active cards list, it does nothing.
     /// </summary>
     /// <param name="card">The card GameObject to remove from the inventory.</param>
-    public void RemoveCardFromInventory(GameObject card)
+    public void RemoveCardFromInventory(string itemName)
     {
-        if (activeCards.Contains(card))
+        var card = ActiveCards.FirstOrDefault(c => c.GetComponent<CardHandler>().ItemName == itemName);
+        if (card != null)
         {
-            string itemName = card.GetComponent<CardHandler>().ItemName;
-            int itemCount = characterData.inventory[itemName];
-            itemCount--;
-            if (itemCount <= 0)
+            CardHandler handler = card.GetComponent<CardHandler>();
+            handler.DecreaseItemAmountBy(1);
+            if (handler.itemAmount <= 0)
             {
-                activeCards.Remove(card);
+                ActiveCards.Remove(card);
                 characterData.inventory.Remove(itemName);
+                Destroy(card);
             }
         }
+        else { Debug.LogWarning($"[INV] Attempted to remove card not in inventory: {card.name}"); }
     }
 
     public void CardHeld(Collider2D held)

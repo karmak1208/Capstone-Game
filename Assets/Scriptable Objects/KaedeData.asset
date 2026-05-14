@@ -19,3 +19,5 @@ MonoBehaviour:
     amount: 1
   - itemName: HealthPotion
     amount: 1
+  - itemName: Arrow
+    amount: 2

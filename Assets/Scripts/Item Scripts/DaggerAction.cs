@@ -5,7 +5,6 @@ public class DaggerAction : CardAction
 {
     public override CardData Data { get; set; }
     public AnimationCurve stabCurve;
-    public Vector3 parentPos => transform.parent.parent.position;
     private bool isStabbing = false;
     private float stabTimer = 0f;
     [SerializeField] private float stabSpeed;
@@ -34,9 +33,9 @@ public class DaggerAction : CardAction
         }
 
         Debug.Log($"[DAGGER] Stabbed towards {cellPos}!");
-        RaycastHit2D hit = Physics2D.Raycast(transform.parent.parent.position, dir, Data.range, LayerMask.GetMask("characters"));
-        Debug.DrawRay(transform.parent.parent.position, dir * Data.range, Color.red, 1f);
-        if (hit.collider != null && hit.collider.gameObject != transform.parent.parent.gameObject)
+        RaycastHit2D hit = Physics2D.Raycast(parentPos, dir, Data.range, LayerMask.GetMask("characters"));
+        Debug.DrawRay(parentPos, dir * Data.range, Color.red, 1f);
+        if (hit.collider != null && hit.collider.gameObject != transform.parent.gameObject)
         {
             Debug.Log($"[DAGGER] Hit {hit.collider.name} for {Data.damage} damage!");
             IDamageable damageable = hit.collider.GetComponent<IDamageable>();

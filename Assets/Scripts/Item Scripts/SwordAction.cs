@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class SwordAction : CardAction
 {
-    private Vector2 parentPos => transform.parent.parent.position;
     public AnimationCurve swingCurve;
     public override CardData Data { get; set; }
 
@@ -18,7 +17,7 @@ public class SwordAction : CardAction
 
     protected override IEnumerator OnExecuteAction(Vector3Int cellPos)
     {
-        Vector2 direction = (new Vector2(cellPos.x, cellPos.y) - parentPos).normalized;
+        Vector2 direction = (cellPos - parentPos).normalized;
         isSwinging = true;
         swingTimer = 0f;
 
@@ -92,5 +91,6 @@ public class SwordAction : CardAction
 
     public override void PreviewAction()
     {
+        throw new System.NotImplementedException();
     }
 }

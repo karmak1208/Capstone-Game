@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: Bow
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   itemName: Bow
-  itemIcon: {fileID: 0}
-  cardAction: {fileID: 0}
+  itemType: Weapon
+  cardAction: {fileID: -5474369580509615027, guid: a8d6f68902c17854fac4442fa5457163, type: 3}
+  damage: 0
+  cooldown: 1
+  range: 10

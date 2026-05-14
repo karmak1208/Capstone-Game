@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5935610741043007050}
   - component: {fileID: 8578416852342327000}
+  - component: {fileID: -5474369580509615027}
   m_Layer: 0
   m_Name: BowPrefab
   m_TagString: Untagged
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -174949377
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 6
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2111858070, guid: 48eac4c4cac94cb469694b9750a15974, type: 3}
@@ -91,3 +92,15 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &-5474369580509615027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8495527513934414291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3020f5e3c83fb8b43abd499bdef1b817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BowAction
