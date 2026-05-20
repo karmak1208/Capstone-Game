@@ -40,6 +40,21 @@ public class CharacterManager : MonoBehaviour
 
     public UnityEvent OnCharacterStartedMove = new UnityEvent();
     public UnityEvent OnCharacterEndedMove = new UnityEvent();
+    public UnityEvent OnPlayerDied;
+
+    public void AddCharacterToParty(CharacterRoot character)
+    {
+
+    }
+
+    public void RemoveCharacterFromParty(CharacterRoot character)
+    {
+        if (_partyMembers.Contains(character))
+        {
+            if (ActiveCharacter == character) DeselectCharacter();
+            _partyMembers.Remove(character);
+        }
+    }
 
     /// <summary>
     /// Switches the active character to the specified one. If the same character is selected again, it will be deselected.

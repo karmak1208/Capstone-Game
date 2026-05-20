@@ -7,7 +7,13 @@ public class EnemyVisibility : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Vector3 lastPos;
     private bool isCharacterMoving = false;
+    private bool hasBeenSeen = false;
+    private bool wasVisible = true;
     private GameObject ghost;
+    private Vector2 ghostPos;
+    [SerializeField] private bool AlwaysVisible;
+
+    public bool IsVisible => spriteRenderer.enabled;
 
     private void Awake()
     {
@@ -27,51 +33,58 @@ public class EnemyVisibility : MonoBehaviour
     {
         CharacterManager.Instance.OnCharacterStartedMove.AddListener(CharacterStartedMoving);
         CharacterManager.Instance.OnCharacterEndedMove.AddListener(CharacterStoppedMoving);
+        CharacterManager.Instance.OnPlayerDied.AddListener(VisibilityUpdate);
+
     }
 
     bool IsVisibleToPlayer(Vector3 position)
     {
-        bool inLight = LightManager.Instance.IsObjectInLight(position);
+        bool inLight = LightManager.Instance.IsObjectInLight(position, "Enemy");
         bool inLOS = LightManager.Instance.IsInLOSOfCharacter(position);
-        Debug.Log($"[ENEMY] {Root.EnemyName} visibility check: InLight={inLight}, InLOS={inLOS}");
+        //Debug.Log($"[ENEMYVISIBILITY] {Root.EnemyName} visibility updated: {(inLight ? "Lit" : "UnLit")} {(inLOS ? "InLOS" : "NoLOS")}");
         return inLight && inLOS;
     }
 
     public void CharacterStartedMoving() => isCharacterMoving = true;
     public void CharacterStoppedMoving() => isCharacterMoving = false;
 
-    bool wasVisible = true;
-    Vector2 ghostPos;
-    private void Update()
+
+    public void VisibilityUpdate()
     {
-        if (isCharacterMoving || lastPos != transform.position)
+        bool visible = IsVisibleToPlayer(transform.position);
+        if (AlwaysVisible) visible = true;
+
+        spriteRenderer.enabled = visible;
+        if (!visible && wasVisible && hasBeenSeen)
         {
-            lastPos = transform.position;
-            bool visible = IsVisibleToPlayer(transform.position);
-            Debug.Log($"[ENEMY] {Root.EnemyName} visibility updated: {(visible ? "Visible" : "Hidden")}");
-            spriteRenderer.enabled = visible;
-            if (!visible && wasVisible)
+            Debug.Log($"[ENEMYVISIBILITY] {Root.EnemyName} has become hidden.");
+            ghost.SetActive(true);
+            ghostPos = transform.position;
+        }
+        else if (visible && !wasVisible)
+        {
+            Debug.Log($"[ENEMYVISIBILITY] {Root.EnemyName} has become visible.");
+            ghost.SetActive(false);
+            hasBeenSeen = true;
+        }
+        if (!visible && ghost.activeSelf)
+        {
+            ghost.transform.position = ghostPos;
+            bool ghostVisible = IsVisibleToPlayer(ghost.transform.position);
+            if (ghostVisible)
             {
-                Debug.Log($"[ENEMY] {Root.EnemyName} has become hidden.");
-                ghost.SetActive(true);
-                ghostPos = transform.position;
-            }
-            else if (visible && !wasVisible)
-            { 
-                Debug.Log($"[ENEMY] {Root.EnemyName} has become visible.");
                 ghost.SetActive(false);
             }
-            if (!visible && ghost.activeSelf)
-            {
-                ghost.transform.position = ghostPos;
-                bool ghostVisible = IsVisibleToPlayer(ghost.transform.position);
-                if (ghostVisible) 
-                {
-                    ghost.SetActive(false);
-                }
-            }
+        }
 
-            wasVisible = visible;
+        wasVisible = visible;
+    }
+    private void Update()
+    {
+        if ((isCharacterMoving || lastPos != transform.position))
+        {
+            lastPos = transform.position;
+            VisibilityUpdate();
         }
     }
 }

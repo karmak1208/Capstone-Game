@@ -81,11 +81,11 @@ public class SwordAction : CardAction
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IDamageable damageable = collision.GetComponent<IDamageable>();
-        if (damageable != null)
+        if (damageable != null && collision.transform != transform.parent)
         {
             Debug.Log($"[SWORD] Collided with {collision.gameObject.name}");
 
-            damageable.TakeDamage(Data.damage); // Example damage value
+            damageable.TakeDamage(Data.damage); 
         }
     }
 

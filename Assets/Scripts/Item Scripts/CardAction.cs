@@ -26,7 +26,6 @@ public abstract class CardAction : MonoBehaviour
     /// <param name="removeCard">Whether to destroy the parent CardHandler after executing the action.</param>
     private IEnumerator ExecuteActionRoutine(Vector3Int cellPos, bool removeCard)
     {
-        var inv = transform.parent.parent.GetComponent<InventoryManager>();
         transform.SetParent(transform.parent.parent); // reparent to character root for action execution
         transform.localScale = Vector3.one; // reset scale to prevent distortion during action execution
         yield return OnExecuteAction(cellPos); // subclass returns an IEnumerator
@@ -42,6 +41,7 @@ public abstract class CardAction : MonoBehaviour
             gameObject.SetActive(false); // hide card if no creator to reset to
         }
 
+        var inv = transform.parent.parent.GetComponent<InventoryManager>();
         if (removeCard)
         {
             if (inv != null)
@@ -52,6 +52,18 @@ public abstract class CardAction : MonoBehaviour
             else Debug.LogWarning($"[CARD ACTION] RemoveCard is true but no InventoryManager found on parent of {gameObject.name}");
         }
 
+    }
+
+
+    public void EnemyExecuteAction(Vector3Int cellPos)
+    {
+        StartCoroutine(EnemyExecuteActionRoutine(cellPos));
+    }
+
+    private IEnumerator EnemyExecuteActionRoutine(Vector3Int cellPos)
+    {
+        yield return OnExecuteAction(cellPos);
+        gameObject.SetActive(false);
     }
 
     public virtual void Initialize(CardData data, GameObject _creator)

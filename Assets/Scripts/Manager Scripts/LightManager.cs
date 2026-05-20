@@ -43,7 +43,6 @@ public class LightManager : MonoBehaviour
 
             if (distToLight <= light.pointLightOuterRadius)
             {
-                Debug.Log($"[LIGHTMANAGER] Position {position} is within light {light.name} range.");
                 Vector3 dirToLight = (lightPos - position).normalized;
                 RaycastHit2D hit = Physics2D.Raycast(position, dirToLight, distToLight, ~LayerMask.GetMask("characters", "players", "lights", "UI"));
 
@@ -53,7 +52,29 @@ public class LightManager : MonoBehaviour
         }
         return false;
     }
-    
+
+    public bool IsObjectInLight(Vector3 position, string excludeTag)
+    {
+        if (sceneLights.Count == 0) { Debug.Log("[LIGHTMANAGER] No lights in sceneLights"); return false; }
+
+        foreach (var light in sceneLights)
+        {
+            if (light.transform.root.CompareTag(excludeTag)) continue;
+            Vector3 lightPos = light.transform.position;
+            float distToLight = Vector3.Distance(position, lightPos);
+
+            if (distToLight <= light.pointLightOuterRadius)
+            {
+                Vector3 dirToLight = (lightPos - position).normalized;
+                RaycastHit2D hit = Physics2D.Raycast(position, dirToLight, distToLight, ~LayerMask.GetMask("characters", "players", "lights", "UI"));
+
+                if (hit.collider == null)
+                    return true;
+            }
+        }
+        return false;
+    }   
+
     /// <summary>
     /// Determines if the given position is within the line of sight of any character in the party.
     /// It performs a raycast from each character to the position to check for obstacles.

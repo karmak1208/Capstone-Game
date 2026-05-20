@@ -1,16 +1,19 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterRoot : MonoBehaviour
 {
     public MovementController Movement { get; private set; }
     public TileHighlighter Highlighter { get; private set; }
     public InventoryManager Inventory { get; private set; }
+    public CharacterHealth Health { get; private set; }
 
     private void Awake()
     {
         Movement = GetComponent<MovementController>();
         Highlighter = GetComponentInChildren<TileHighlighter>();
         Inventory = GetComponent<InventoryManager>();
+        Health = GetComponent<CharacterHealth>();
         if (Movement == null)
         {
             Debug.LogError("CharacterRoot requires a MovementController component.");
@@ -22,6 +25,10 @@ public class CharacterRoot : MonoBehaviour
         if (Inventory == null)
         {
             Debug.LogError("CharacterRoot requires an InventoryManager component.");
+        }
+        if (Health == null)
+        {
+            Debug.LogError("CharacterRoot requires an CharacterHealth component.");
         }
 
 

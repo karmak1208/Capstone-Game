@@ -49,19 +49,16 @@ public class MovementController : MonoBehaviour, IResettable, IActivatable
     /// </summary>
     public void MoveTo(Vector3Int characterCellPos, Vector3Int targetTilePos)
     {
-        Debug.Log($"[MOVEMENT] Attempting to move from {characterCellPos} to {targetTilePos} for {Root.CharacterName}.");
         if (!inputEnabled || isMoving) { Debug.Log("[MOVEMENT] Input is currently disabled for this character."); return; }
 
         if (IsMoveTooFar(characterCellPos, targetTilePos)) { Debug.Log($"[MOVEMENT] Target tile is too far."); return; }
 
         List<Vector3Int> pathList = PathfindingSystem.Instance.FindPath(characterCellPos, targetTilePos);
-        Debug.Log($"[MOVEMENT] Pathfinding following path: {string.Join(" -> ", pathList)}");
         int pathDistance = pathList.Count - 1;
         if (pathList != null && pathList.Count > 0)
         {
             if (pathDistance <= remainingMovementRange)
             {
-                Debug.Log($"[MOVEMENT] Path found with {pathDistance} steps. Starting movement.");
                 StartCoroutine(MovePlayerAlongPath(pathList));
                 remainingMovementRange -= pathDistance;
                 moveRangeText.text = $"Move Range: {remainingMovementRange}";
@@ -104,6 +101,5 @@ public class MovementController : MonoBehaviour, IResettable, IActivatable
     {
         remainingMovementRange = maxMovementRange;
         moveRangeText.text = $"Move Range: {remainingMovementRange}";
-        Debug.Log($"[MOVEMENT] Movement range reset for {Root.CharacterName}. Remaining Range: {remainingMovementRange}");
     }
 }

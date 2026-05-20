@@ -26,11 +26,9 @@ public class CardHandler : MonoBehaviour
 
         CardData cardSO = await CardLoader.Instance?.LoadObject<CardData>(itemName);
         if (cardSO == null) Debug.LogError($"[CardHandler] Failed to load CardData for item: {itemName}");
-        else Debug.Log($"[CardHandler] Successfully loaded CardData for item: {itemName}");
 
         GameObject cardPrefab = await CardLoader.Instance?.LoadObject<GameObject>(cardSO.itemName + "Prefab");
         if (cardPrefab == null) Debug.LogError($"[CardHandler] Failed to load card prefab for item: {cardSO.itemName}");
-        else Debug.Log($"[CardHandler] Successfully loaded card prefab for item: {cardSO.itemName}");
 
         CardItem = Instantiate(cardPrefab, transform);
         CardItem.GetComponent<CardAction>()?.Initialize(cardSO, gameObject);
@@ -42,7 +40,6 @@ public class CardHandler : MonoBehaviour
 
         itemAmountText = GetComponentInChildren<TextMeshProUGUI>();
         if (itemAmountText == null) Debug.LogError($"[CardHandler] Failed to find TextMeshProUGUI component in children of {gameObject.name}");
-        else Debug.Log($"[CardHandler] Successfully found TextMeshProUGUI component in children of {gameObject.name}");
         itemAmountText.text = itemAmount.ToString();
     }
 

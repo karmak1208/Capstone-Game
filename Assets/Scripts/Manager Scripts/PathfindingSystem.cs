@@ -5,15 +5,13 @@ using System.Collections.Generic;
 public class Node
 {
     public Vector3Int Position;
-    public bool IsWalkable;
     public float GCost;
     public float HCost;
     public float FCost => GCost + HCost;
     public Node Parent;
-    public Node(Vector3Int position, bool isWalkable)
+    public Node(Vector3Int position)
     {
         Position = position;
-        IsWalkable = isWalkable;
     }
 }
 
@@ -31,6 +29,18 @@ public class PathfindingSystem : MonoBehaviour
         {
             Instance = this;
         }
+        DoorController[] allDoors = FindObjectsByType<DoorController>(FindObjectsSortMode.None);
+        foreach (DoorController door in allDoors)
+        {
+            doors[floormap.WorldToCell(door.transform.position)] = door;
+            Debug.Log($"[Pathfinding] Added {door.transform.position} to doors with state {door.IsOpen}");
+        }
+
+        bounds = floormap.cellBounds;
+        foreach (Vector3Int pos in bounds.allPositionsWithin)
+        {
+            nodes[pos] = new Node(pos);
+        }
     }
 
     [SerializeField] Tilemap floormap;
@@ -38,17 +48,15 @@ public class PathfindingSystem : MonoBehaviour
     private BoundsInt bounds;
     public Dictionary<Vector3Int, Node> nodes = new Dictionary<Vector3Int, Node>();
 
+    private Dictionary<Vector3Int, DoorController> doors = new();
+
     void Start()
     {
-        bounds = floormap.cellBounds;
-        foreach (Vector3Int pos in bounds.allPositionsWithin)
-        {
-            nodes[pos] = new Node(pos, IsTileWalkable(pos));
-        }
+
     }
 
     /// <summary>
-    /// Determines if a tile is walkable by checking if it has a floor tile and does not have a wall tile.
+    /// Determines if a tile is walkable by checking if it has a floor tile and does not have a wall tile or closed door.
     /// </summary>
     /// <param name="pos">The position of the tile to check.</param>
     /// <returns>True if the tile is walkable, false otherwise.</returns>
@@ -56,7 +64,9 @@ public class PathfindingSystem : MonoBehaviour
     {
         bool hasFloor = floormap.HasTile(pos);
         bool hasWall = wallmap.HasTile(pos);
-        return hasFloor && !hasWall; 
+        bool hasClosedDoor = doors.TryGetValue(pos, out DoorController door) && !door.IsOpen;
+
+        return hasFloor && !hasWall && !hasClosedDoor;
     }
 
     /// <summary>
@@ -100,8 +110,8 @@ public class PathfindingSystem : MonoBehaviour
             Vector3Int side1 = node.Position + new Vector3Int(dir.x, 0, 0); // Horizontal neighbor
             Vector3Int side2 = node.Position + new Vector3Int(0, dir.y, 0); // Vertical neighbor
 
-            bool side1Walkable = nodes.TryGetValue(side1, out Node s1) && s1.IsWalkable;
-            bool side2Walkable = nodes.TryGetValue(side2, out Node s2) && s2.IsWalkable;
+            bool side1Walkable = nodes.TryGetValue(side1, out Node s1) && IsTileWalkable(s1.Position);
+            bool side2Walkable = nodes.TryGetValue(side2, out Node s2) && IsTileWalkable(s2.Position);
 
             // Only allow diagonal if both sides are clear
             if (!side1Walkable || !side2Walkable) continue;
@@ -122,9 +132,14 @@ public class PathfindingSystem : MonoBehaviour
     /// <returns>A list of positions representing the path, or null if no path is found.</returns>
     public List<Vector3Int> FindPath(Vector3Int startPos, Vector3Int targetPos)
     {
-        if (!nodes.TryGetValue(startPos, out Node startNode) ||
-            !nodes.TryGetValue(targetPos, out Node targetNode))
-            return null;
+        bool Try(bool result, string label) { if (!result) Debug.Log($"[PATHFINDING] Missing node: {label}"); return result; }
+
+        if (!Try(nodes.TryGetValue(startPos, out Node startNode), "start") |
+            !Try(nodes.TryGetValue(targetPos, out Node targetNode), "target"))
+        {
+                Debug.LogError("[PATHFINDING] Start or target position is out of bounds of the tilemap.");
+                return null;
+        }
 
         List<Node> openList = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();
@@ -161,7 +176,7 @@ public class PathfindingSystem : MonoBehaviour
 
             foreach (Node neighbor in GetNeighbors(current))
             {
-                if (!neighbor.IsWalkable || closedSet.Contains(neighbor))
+                if (!IsTileWalkable(neighbor.Position) || closedSet.Contains(neighbor))
                     continue;
 
                 float tentativeG = current.GCost + GetMovementCost(current, neighbor);
@@ -178,6 +193,7 @@ public class PathfindingSystem : MonoBehaviour
             }
         }
 
+        Debug.LogWarning("[PATHFINDING] No path found between start and target positions.");
         return null; // No path found
     }
 
@@ -199,8 +215,14 @@ public class PathfindingSystem : MonoBehaviour
         }
 
         path.Add(startNode.Position);
-        path.Reverse();
-        return path;
+        if (path.Count > 1)
+        {
+            path.Reverse();
+            return path;
+        }
+        
+        Debug.LogWarning("[PATHFINDING] Start and target positions are the same. No path needed."); 
+        return null;
     }
 
     private float GetMovementCost(Node a, Node b)

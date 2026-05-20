@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8866700053138795358}
   - component: {fileID: 3607533568812207849}
   - component: {fileID: -8843681028906091472}
+  - component: {fileID: -6249487979657244284}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -288,3 +289,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   cardPrefab: {fileID: 4955835389366214823, guid: e3792be83157d244b852ba81c8fffecd, type: 3}
+  ActiveCards: []
+  TimesAttackedThisTurn: 0
+  MaxAttacksPerTurn: 1
+--- !u!114 &-6249487979657244284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847509848120060856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df8540767ee7e394584095fc2e9ae1c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterHealth

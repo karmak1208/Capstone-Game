@@ -98,9 +98,17 @@ public class InputHandler : MonoBehaviour
     void DetermineAction()
     {
         Collider2D hit = Physics2D.OverlapPoint(mousePos);
-        if (hit != null && hit.CompareTag("Player"))
+        if (hit != null)
         {
-            SwitchCharacter(hit.GetComponent<CharacterRoot>());
+            if (hit.CompareTag("Player"))
+            {
+                SwitchCharacter(hit.GetComponent<CharacterRoot>());
+            }
+            else if (hit.GetComponent<IInteractable>() != null)
+            {
+                hit.GetComponent<IInteractable>().Interact();
+            }
+
         }
         else
         {

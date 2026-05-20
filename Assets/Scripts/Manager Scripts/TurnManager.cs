@@ -22,6 +22,7 @@ public class TurnManager : MonoBehaviour
 
     public UnityEvent<int> OnTurnStart;
     public UnityEvent OnTurnEnd;
+    public UnityEvent AfterTurnEnd;
     public int CurrentTurn { get; private set; } = 1;
 
     int _pending = 0;
@@ -41,16 +42,15 @@ public class TurnManager : MonoBehaviour
         OnTurnStart?.Invoke(CurrentTurn);
     }
 
-    public void EndTurn()
-    {
-        StartCoroutine(EndTurnRoutine());
-    }
+    public void EndTurn() => StartCoroutine(EndTurnRoutine());
+    
     private IEnumerator EndTurnRoutine()
     {
         Debug.Log($"[TurnManager] Ending Turn {CurrentTurn}");
         _pending = 0;
         OnTurnEnd?.Invoke();
         yield return new WaitUntil(() => _pending <= 0);
+        AfterTurnEnd.Invoke();
         CurrentTurn++;
         StartTurn();
     }

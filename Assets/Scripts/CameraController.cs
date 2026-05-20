@@ -52,12 +52,10 @@ public class CameraController : MonoBehaviour
         if (scroll < 0)
         {
             Camera.main.orthographicSize += zoomSpeed;
-            Debug.Log($"[CAM] Zooming out. New orthographic size: {Camera.main.orthographicSize}");
         }
         else if (scroll > 0)
         {
             Camera.main.orthographicSize -= zoomSpeed;
-            Debug.Log($"[CAM] Zooming in. New orthographic size: {Camera.main.orthographicSize}");
         }
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoom, maxZoom);
     }
