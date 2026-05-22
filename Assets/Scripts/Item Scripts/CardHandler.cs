@@ -9,7 +9,8 @@ public class CardHandler : MonoBehaviour
     public int itemAmount = 1;
     private int lastItemAmount;
 
-    bool isFollowingCursor = false;
+    private bool isFollowingCursor = false;
+    public bool resizeForCam;
     public Vector2 cardSize => GetComponent<SpriteRenderer>().bounds.size;
     Vector2 offsetFromCursor => new Vector2(cardSize.x / 2, cardSize.y / 2);
     public GameObject CardItem { get; private set; }
@@ -20,9 +21,10 @@ public class CardHandler : MonoBehaviour
     /// Initializes the card by loading the corresponding CardData and prefab based on the provided itemName.
     /// </summary>
     /// <param name="itemName">The name of the item to initialize the card with.</param>
-    public async void Initialize(string itemName)
+    public async void Initialize(string itemName, bool resize = true)
     {
         lastItemAmount = itemAmount;
+        resizeForCam = resize;
 
         CardData cardSO = await CardLoader.Instance?.LoadObject<CardData>(itemName);
         if (cardSO == null) Debug.LogError($"[CardHandler] Failed to load CardData for item: {itemName}");
@@ -63,7 +65,8 @@ public class CardHandler : MonoBehaviour
         {
            GoToCursor();
         }
-        ScaleToCamSize();
+        if (resizeForCam)
+            ScaleToCamSize();
 
         if (itemAmount != lastItemAmount && itemAmountText != null)
         {

@@ -32,28 +32,8 @@ public class LightManager : MonoBehaviour
     /// </summary>
     /// <param name="position">The position to check for illumination.</param>
     /// <returns>True if the position is illuminated by any light, false otherwise.</returns>
-    public bool IsObjectInLight(Vector3 position)
-    {
-        if (sceneLights.Count == 0) { Debug.Log("[LIGHTMANAGER] No lights in sceneLights"); return false; }
 
-        foreach (var light in sceneLights)
-        {
-            Vector3 lightPos = light.transform.position;
-            float distToLight = Vector3.Distance(position, lightPos);
-
-            if (distToLight <= light.pointLightOuterRadius)
-            {
-                Vector3 dirToLight = (lightPos - position).normalized;
-                RaycastHit2D hit = Physics2D.Raycast(position, dirToLight, distToLight, ~LayerMask.GetMask("characters", "players", "lights", "UI"));
-
-                if (hit.collider == null)
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    public bool IsObjectInLight(Vector3 position, string excludeTag)
+    public bool IsObjectInLight(Vector3 position, string excludeTag = null)
     {
         if (sceneLights.Count == 0) { Debug.Log("[LIGHTMANAGER] No lights in sceneLights"); return false; }
 
@@ -66,7 +46,7 @@ public class LightManager : MonoBehaviour
             if (distToLight <= light.pointLightOuterRadius)
             {
                 Vector3 dirToLight = (lightPos - position).normalized;
-                RaycastHit2D hit = Physics2D.Raycast(position, dirToLight, distToLight, ~LayerMask.GetMask("characters", "players", "lights", "UI"));
+                RaycastHit2D hit = Physics2D.Raycast(position, dirToLight, distToLight, ~LayerMask.GetMask("characters", "players", "lights", "objects", "UI"));
 
                 if (hit.collider == null)
                     return true;
@@ -88,7 +68,8 @@ public class LightManager : MonoBehaviour
         foreach (var character in characters)
         {
             Vector3 characterPos = character.Position;
-            RaycastHit2D hit = Physics2D.Raycast(characterPos, (position - characterPos).normalized, Vector3.Distance(characterPos, position), ~LayerMask.GetMask("characters", "players", "UI"));
+            RaycastHit2D hit = Physics2D.Raycast(characterPos, (position - characterPos).normalized, Vector3.Distance(characterPos, position), ~LayerMask.GetMask("characters", "players", "objects", "UI"));
+
             if (hit.collider == null) // No obstacles between character and position
                 return true;
 

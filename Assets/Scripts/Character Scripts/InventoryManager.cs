@@ -128,6 +128,18 @@ public class InventoryManager : MonoBehaviour, IResettable, IActivatable
         else { Debug.LogWarning($"[INV] Attempted to remove card not in inventory: {card.name}"); }
     }
 
+    public void CardClicked(Collider2D clicked)
+    {
+        if (!ActiveCards.Contains(clicked.gameObject))
+        {
+            Debug.Log($"[INV] Adding clicked card to inventory {clicked.gameObject.name}");
+            clicked.transform.SetParent(transform);
+            ActiveCards.Add(clicked.gameObject);
+            var handler = clicked.GetComponent<CardHandler>();
+            handler.resizeForCam = true;
+        }
+    }
+
     public void CardHeld(Collider2D held)
     {
         held.GetComponent<CardHandler>()?.FollowCursor(true);

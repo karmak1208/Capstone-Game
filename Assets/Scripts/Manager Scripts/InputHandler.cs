@@ -104,6 +104,11 @@ public class InputHandler : MonoBehaviour
             {
                 SwitchCharacter(hit.GetComponent<CharacterRoot>());
             }
+            else if (hit.CompareTag("Card"))
+            {
+                Debug.Log($"[INPUT] Card Clicked");
+                active?.Inventory.CardClicked(hit);
+            }
             else if (hit.GetComponent<IInteractable>() != null)
             {
                 hit.GetComponent<IInteractable>().Interact();
