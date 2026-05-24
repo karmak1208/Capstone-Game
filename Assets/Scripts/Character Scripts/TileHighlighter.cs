@@ -1,13 +1,22 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
-using System.Collections.Generic;
 
 public class TileHighlighter : MonoBehaviour, IActivatable
 {
     [SerializeField] Tilemap floormap;
     [SerializeField] Tilemap highlightMap;
     [SerializeField] float tileSize;
+
+    [SerializeField] TileBase upRight;
+    [SerializeField] TileBase upLeft;
+    [SerializeField] TileBase downRight;
+    [SerializeField] TileBase downLeft;
+    [SerializeField] TileBase upStraight;
+    [SerializeField] TileBase sideStraight;
+    [SerializeField] TileBase empty;
 
     private List<Vector3Int> highlightedCells = new List<Vector3Int>();
     private Vector3Int mouseCellPos;
@@ -19,7 +28,7 @@ public class TileHighlighter : MonoBehaviour, IActivatable
 
     void Awake()
     {
-        highlightMap.gameObject.SetActive(false);
+        
     }
 
     public void SetActive(bool active)
@@ -27,49 +36,102 @@ public class TileHighlighter : MonoBehaviour, IActivatable
         isActive = active;
         if (!isActive)
         {
-            ClearHighlight();
+            ClearAllHighlight();
         }
+
     }
 
     void Start()
     {
         Root = GetComponent<CharacterRoot>();
+        Root.OnFinishedLoading.AddListener(Initialize);
 
-        foreach (Vector3Int pos in highlightMap.cellBounds.allPositionsWithin)
-        {
-            if (highlightMap.HasTile(pos))
-            {
-                highlightMap.SetTileFlags(pos, TileFlags.None);
-                highlightMap.SetColor(pos, new Color(1f, 1f, 1f, 0f));
-            }
-        }
+        highlightMap = FindObjectsByType<Tilemap>(FindObjectsSortMode.None).FirstOrDefault(t => t.gameObject.name == "Highlight");
+        if (highlightMap == null) Debug.LogError("[TileHighlighter] Failed to find HighlightMap in the scene.");
+
+        floormap = FindObjectsByType<Tilemap>(FindObjectsSortMode.None).FirstOrDefault(t => t.gameObject.name == "Floor");
+
         highlightMap.gameObject.SetActive(true);
     }
 
-    /// <summary>Sets the highlight tile at the given cell position to be visible at 0.5 opacity or invisible.</summary>
-    public void SetCellVisible(Vector3Int cellPos, bool visible)
+    void Initialize()
     {
-        highlightMap.SetTileFlags(cellPos, TileFlags.None);
-        highlightMap.SetColor(cellPos, visible ? new Color(1f, 1f, 1f, 0.5f) : new Color(1f, 1f, 1f, 0f));
+
     }
 
-    void HighlightPath(Vector3Int startCell, Vector3Int targetCell)
+    List<TileBase> GetHighlightTileBase(List<Vector3Int> path)
     {
-        List<Vector3Int> pathList = PathfindingSystem.Instance.FindPath(startCell, targetCell);
+        List<TileBase> tiles = new List<TileBase>();
+        TileBase GetCurrentSprite(int index)
+        {
+            if (path.Count < 2) return empty;
+            if (index == 0) return empty;
+
+            if (index == path.Count - 1) return empty;
+
+            Vector3Int current = path[index];
+            Vector3Int next = path[index + 1];
+            Vector3Int previous = path[index - 1];
+            Vector3Int directionToNext = next - current;
+            Vector3Int directionFromPrevious = current - previous;
+
+
+            // Check corners first (compound conditions)
+            if (directionToNext == Vector3Int.right && directionFromPrevious == Vector3Int.up) return upRight;
+            if (directionToNext == Vector3Int.left && directionFromPrevious == Vector3Int.up) return upLeft;
+            if (directionToNext == Vector3Int.right && directionFromPrevious == Vector3Int.down) return downRight;
+            if (directionToNext == Vector3Int.left && directionFromPrevious == Vector3Int.down) return downLeft;
+
+            if (directionToNext == Vector3Int.up && directionFromPrevious == Vector3Int.right) return downLeft;
+            if (directionToNext == Vector3Int.up && directionFromPrevious == Vector3Int.left) return downRight;
+            if (directionToNext == Vector3Int.down && directionFromPrevious == Vector3Int.right) return upLeft;
+            if (directionToNext == Vector3Int.down && directionFromPrevious == Vector3Int.left) return upRight;
+
+            // Then straight directions
+            if (directionToNext == Vector3Int.up) return upStraight;
+            if (directionToNext == Vector3Int.down) return upStraight;
+            if (directionToNext == Vector3Int.right) return sideStraight;
+            if (directionToNext == Vector3Int.left) return sideStraight;
+
+            Debug.LogError($"[TileHighlighter] Invalid direction combo: toNext={directionToNext}, fromPrev={directionFromPrevious}");
+            return empty; // safe fallback instead of null
+        }
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            TileBase _tile = GetCurrentSprite(i);
+            if (_tile is not TileBase)
+            {
+                Debug.LogWarning($"[TileHighlighter] GetCurrentSprite returned null for path index {i}. Defaulting to upStraight.");
+                _tile = upStraight; // safe fallback
+            }
+            tiles.Add(_tile);
+        }
+
+        return tiles;
+    }
+
+    void HighlightPath(List<Vector3Int> pathList)
+    {
+        List<TileBase> tileBases = GetHighlightTileBase(pathList);
         if (pathList == null) return;
 
-        foreach (Vector3Int cell in pathList)
+        for (int i = 0; i < pathList.Count; i++)
         {
-            SetCellVisible(cell, true);
-            highlightedCells.Add(cell);
+            highlightMap.SetTile(pathList[i], tileBases[i]);
+            highlightedCells.Add(pathList[i]);
         }
     }
+    public void ClearTile(Vector3Int cellPos)
+    {
+        highlightMap.SetTile(cellPos, null);
+    }
 
-    void ClearHighlight()
+    void ClearAllHighlight()
     {
         foreach (Vector3Int pos in highlightedCells)
         {
-            SetCellVisible(pos, false);
+            ClearTile(pos);
         }
         highlightedCells.Clear();
     }
@@ -84,8 +146,8 @@ public class TileHighlighter : MonoBehaviour, IActivatable
     {
         if (!isActive) return; // Don't update if not active
         if (Root.Movement.inputEnabled == false) // Don't update highlight if input is disabled
-        {
-            ClearHighlight();
+        { 
+            ClearAllHighlight();
             return; 
         }
 
@@ -94,11 +156,13 @@ public class TileHighlighter : MonoBehaviour, IActivatable
         Vector3Int newMouseCellPos = GetMouseCellPosition();
         if (newMouseCellPos != mouseCellPos && timeSinceLastUpdate >= updateInterval)
         {
-            ClearHighlight();
+            ClearAllHighlight();
             mouseCellPos = newMouseCellPos;
             timeSinceLastUpdate = 0f;
             Vector3Int characterCellPos = floormap.WorldToCell(Root.Position);
-            HighlightPath(characterCellPos, mouseCellPos);
+            List<Vector3Int> pathList = PathfindingSystem.Instance.FindPath(characterCellPos, mouseCellPos);
+            if (pathList != null && pathList.Count > 0)
+                HighlightPath(pathList);
         }
         timeSinceLastUpdate += Time.deltaTime;
     }

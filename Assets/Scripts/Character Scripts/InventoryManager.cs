@@ -6,6 +6,8 @@ using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour, IResettable, IActivatable
 {
+    private CharacterRoot Root;
+
     public GameObject cardPrefab;
     private CharacterData characterData;
     public List<GameObject> ActiveCards = new List<GameObject>();
@@ -14,17 +16,21 @@ public class InventoryManager : MonoBehaviour, IResettable, IActivatable
 
     private Vector2 hotbarOrigin = new Vector2(0.5f, 0.2f);
     private Vector2 hotbarStartPos;
+    [SerializeField] private float cardSpacing;
 
     public int TimesAttackedThisTurn = 0;
     public int MaxAttacksPerTurn = 1;
 
-    async void Start()
+    void Start()
     {
         hotbarStartPos = hotbarOrigin;
-        characterData = await CardLoader.Instance?.LoadObject<CharacterData>((string)(GetComponent<CharacterRoot>().CharacterName + "Data"));
-        if (characterData == null) { Debug.LogWarning("[INV] Character data not loaded. Cannot populate inventory."); return; }
+        Root = GetComponent<CharacterRoot>();
+        Root.OnFinishedLoading.AddListener(Initialize);
+    }
 
-        foreach (var item in characterData.inventory)
+    void Initialize()
+    {
+        foreach (var item in Root.Data.inventory)
             for (int i = 0; i < item.Value; i++)
             {
                 GameObject card = CreateCard(item.Key);
@@ -75,7 +81,7 @@ public class InventoryManager : MonoBehaviour, IResettable, IActivatable
     {
         CardHandler handler = ActiveCards[index].GetComponent<CardHandler>();
         float cardWidth = handler.cardSize.x;
-        float spacing = cardWidth + 0.1f * (Camera.main.orthographicSize / 5f); // scale gap with zoom too
+        float spacing = cardWidth + cardSpacing * (Camera.main.orthographicSize / 5f); // scale gap with zoom too
         float totalWidth = spacing * ActiveCards.Count - spacing + cardWidth; // span of all cards
 
         // Convert viewport origin to world
@@ -92,8 +98,9 @@ public class InventoryManager : MonoBehaviour, IResettable, IActivatable
     /// </summary>
     /// <param name="itemName">The name of the item to initialize the card with.</param>
     /// <returns>The created card GameObject.</returns>
-    GameObject CreateCard(string itemName)
+    public GameObject CreateCard(string itemName)
     {
+        Debug.Log("[INVENTORYMANAGER] Creating card for item: " + itemName);
         if (_cardLookup.TryGetValue(itemName, out GameObject existing))
         {
             existing.GetComponent<CardHandler>().IncreaseItemAmountBy(1);

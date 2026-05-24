@@ -44,7 +44,8 @@ public class CharacterManager : MonoBehaviour
 
     public void AddCharacterToParty(CharacterRoot character)
     {
-
+        Debug.Log($"[CharacterManager] Adding character to party: {character.CharacterName}");
+        _partyMembers.Add(character);
     }
 
     public void RemoveCharacterFromParty(CharacterRoot character)

@@ -173,10 +173,10 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1115189393
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2099787755, guid: 48eac4c4cac94cb469694b9750a15974, type: 3}
+  m_Sprite: {fileID: -4052810538847602026, guid: 40b2a0a9596c9e044b709f8cfcc29d87, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -348,7 +348,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
   WeaponPrefab: {fileID: 1316304128756368861, guid: 17907483e44818244887e26981cc3d50, type: 3}
+  _CardData: {fileID: 0}
   weaponName: Sword
+  HasAttackedThisTurn: 0
 --- !u!1 &2549878436062687362
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,7 +429,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1115189393
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1202814225, guid: 48eac4c4cac94cb469694b9750a15974, type: 3}
@@ -518,7 +520,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -174949377
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1202814225, guid: 48eac4c4cac94cb469694b9750a15974, type: 3}

@@ -11,14 +11,14 @@ public class CharacterHealth : MonoBehaviour, IDamageable
     private void Awake()
     {
         Root = GetComponent<CharacterRoot>();
-        if (Root == null)
-        {
-            Debug.LogError("CharacterHealth requires an EnemyRoot component.");
-        }
+        Root.OnFinishedLoading.AddListener(Initialize);
 
-        MaxHealth = 1;
-        CurrentHealth = MaxHealth;
         IsDead = false;
+    }
+    void Initialize()
+    {
+        MaxHealth = Root.Data.Health;
+        CurrentHealth = MaxHealth;
     }
 
     public void TakeDamage(float amount)

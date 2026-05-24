@@ -44,20 +44,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 456434621
+    locked: 0
   - name: Ground
     uniqueID: 2517018975
-    locked: 0
-  - name: Characters
-    uniqueID: 3179777903
     locked: 0
   - name: Walls
     uniqueID: 3488259581
     locked: 0
-  - name: Vision
-    uniqueID: 411512153
+  - name: Objects
+    uniqueID: 4260226299
     locked: 0
-  - name: Fog
-    uniqueID: 2091725505
+  - name: Characters
+    uniqueID: 3179777903
     locked: 0
   - name: UI
     uniqueID: 4120017919

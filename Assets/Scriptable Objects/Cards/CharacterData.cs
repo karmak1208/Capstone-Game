@@ -13,6 +13,11 @@ public class CharacterData : ScriptableObject
     public List<inventoryItem> _inventoryList = new();
     public Dictionary<string, int> inventory = new();
 
+    public string CharacterName;
+    public float MoveSpeed;
+    public float MaxMovementRange;
+    public float Health;
+
     void OnEnable()
     {
         foreach (inventoryItem item in _inventoryList)

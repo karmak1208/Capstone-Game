@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6420613415425918510}
   - component: {fileID: 5961092216685203246}
   - component: {fileID: 1295629394020713614}
-  - component: {fileID: -1444917308889773365}
   - component: {fileID: -3597591767237224982}
+  - component: {fileID: -1444917308889773365}
   m_Layer: 5
   m_Name: CardPrefab
   m_TagString: Card
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 4955835389366214823}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.23, y: -1.39, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -109,10 +109,10 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -174949377
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -1904999207, guid: 48eac4c4cac94cb469694b9750a15974, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e198cda0b420f924ab40ca60b5ac1545, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -122,20 +122,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &-1444917308889773365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4955835389366214823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cd95f264941882478f81f008762c5fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  itemAmount: 1
-  resizeForCam: 0
 --- !u!61 &-3597591767237224982
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -170,18 +156,33 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.00016531348, y: -0.026117027}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 3}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 2, y: 3}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2, y: 3}
+  m_Size: {x: 0.99779385, y: 1.5581456}
   m_EdgeRadius: 0
+--- !u!114 &-1444917308889773365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4955835389366214823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cd95f264941882478f81f008762c5fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  itemAmount: 1
+  resizeForCam: 0
+  scaleFactor: 2
 --- !u!1 &5906609050063092735
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,7 +217,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.5, y: 0.75}
+  m_AnchoredPosition: {x: -0.81, y: 1.14}
   m_SizeDelta: {x: 0.75, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2165440820898771209
@@ -249,15 +250,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 24e6f60ff0dbf4d489d7413775ee9d1f, type: 2}
+  m_sharedMaterial: {fileID: 7245974984369578193, guid: 24e6f60ff0dbf4d489d7413775ee9d1f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278197503
-  m_fontColor: {r: 1, g: 0.11129035, b: 0, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -274,8 +275,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1
-  m_fontSizeBase: 1
+  m_fontSize: 0.5
+  m_fontSizeBase: 0.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.PlayerSettings;
+using static UnityEngine.InputSystem.Controls.AxisControl;
 
 public class CameraController : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float minZoom;
     [SerializeField] private float maxZoom;
 
+    [SerializeField] private float maxDistance;
+
     private void Start()
     {
         lookAction = InputSystem.actions["Look"];
@@ -20,20 +24,24 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-       CameraDrag();
-       CameraScroll();
+        CameraDrag();
+        CameraScroll();
+    }
+
+    bool IsOverDistanceLimit()
+    {
+        Vector2 dist = (Vector2)Camera.main.transform.position - Vector2.zero;
+        return dist.sqrMagnitude > maxDistance * maxDistance;
     }
 
     void CameraDrag()
     {
-         // On mouse button down, record the world position
         if (lookAction.WasPressedThisFrame())
         {
             dragOrigin = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             isDragging = true;
         }
 
-        // While dragging, move the camera
         if (lookAction.IsPressed() && isDragging)
         {
             Vector3 difference = dragOrigin - Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
@@ -43,6 +51,13 @@ public class CameraController : MonoBehaviour
         if (lookAction.WasReleasedThisFrame())
         {
             isDragging = false;
+        }
+
+        if (IsOverDistanceLimit())
+        {
+            Vector3 pos = Camera.main.transform.position;
+            Vector2 clamped = Vector2.ClampMagnitude(new Vector2(pos.x, pos.y), maxDistance);
+            Camera.main.transform.position = new Vector3(clamped.x, clamped.y, pos.z);
         }
     }
 

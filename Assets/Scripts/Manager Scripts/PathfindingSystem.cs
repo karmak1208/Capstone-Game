@@ -70,8 +70,7 @@ public class PathfindingSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets the neighboring nodes of a given node, considering both cardinal and diagonal directions.
-    /// Diagonal neighbors are only included if both adjacent cardinal neighbors are walkable to avoid clipping into walls during movement.
+    /// Gets the neighboring nodes of a given node, considering only the four cardinal directions (up, down, left, right).
     /// </summary>
     /// <param name="node">The node for which to find neighbors.</param>
     /// <returns>A list of neighboring nodes.</returns>
@@ -79,7 +78,6 @@ public class PathfindingSystem : MonoBehaviour
     {
         List<Node> neighbors = new List<Node>();
 
-        // Check cardinal directions first
         Vector3Int[] cardinalDirs = new Vector3Int[]
         {
         new Vector3Int(0, 1, 0),    // Up
@@ -90,32 +88,6 @@ public class PathfindingSystem : MonoBehaviour
 
         foreach (Vector3Int dir in cardinalDirs)
         {
-            Vector3Int neighborPos = node.Position + dir;
-            if (nodes.TryGetValue(neighborPos, out Node neighbor))
-                neighbors.Add(neighbor);
-        }
-
-        // For diagonals, both adjacent cardinal neighbors must be walkable
-        Vector3Int[] diagonalDirs = new Vector3Int[]
-        {
-        new Vector3Int(1, 1, 0),    // Up-Right
-        new Vector3Int(-1, 1, 0),   // Up-Left
-        new Vector3Int(1, -1, 0),   // Down-Right
-        new Vector3Int(-1, -1, 0),  // Down-Left
-        };
-
-        foreach (Vector3Int dir in diagonalDirs)
-        {
-            // The two orthogonal tiles that form the "corner" of this diagonal
-            Vector3Int side1 = node.Position + new Vector3Int(dir.x, 0, 0); // Horizontal neighbor
-            Vector3Int side2 = node.Position + new Vector3Int(0, dir.y, 0); // Vertical neighbor
-
-            bool side1Walkable = nodes.TryGetValue(side1, out Node s1) && IsTileWalkable(s1.Position);
-            bool side2Walkable = nodes.TryGetValue(side2, out Node s2) && IsTileWalkable(s2.Position);
-
-            // Only allow diagonal if both sides are clear
-            if (!side1Walkable || !side2Walkable) continue;
-
             Vector3Int neighborPos = node.Position + dir;
             if (nodes.TryGetValue(neighborPos, out Node neighbor))
                 neighbors.Add(neighbor);
@@ -137,8 +109,8 @@ public class PathfindingSystem : MonoBehaviour
         if (!Try(nodes.TryGetValue(startPos, out Node startNode), "start") |
             !Try(nodes.TryGetValue(targetPos, out Node targetNode), "target"))
         {
-                Debug.LogError("[PATHFINDING] Start or target position is out of bounds of the tilemap.");
-                return null;
+            Debug.LogError("[PATHFINDING] Start or target position is out of bounds of the tilemap.");
+            return null;
         }
 
         List<Node> openList = new List<Node>();
@@ -220,8 +192,8 @@ public class PathfindingSystem : MonoBehaviour
             path.Reverse();
             return path;
         }
-        
-        Debug.LogWarning("[PATHFINDING] Start and target positions are the same. No path needed."); 
+
+        Debug.LogWarning("[PATHFINDING] Start and target positions are the same. No path needed.");
         return null;
     }
 
@@ -234,9 +206,8 @@ public class PathfindingSystem : MonoBehaviour
 
     private float GetHeuristic(Node a, Node b)
     {
-        // Chebyshev distance (ideal for 8-directional grid movement)
         int dx = Mathf.Abs(a.Position.x - b.Position.x);
         int dy = Mathf.Abs(a.Position.y - b.Position.y);
-        return Mathf.Max(dx, dy);
+        return dx + dy; // Manhattan distance
     }
 }

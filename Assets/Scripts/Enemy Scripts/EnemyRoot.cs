@@ -1,5 +1,6 @@
+using System;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 
 
 public interface IEnemyState
@@ -7,6 +8,26 @@ public interface IEnemyState
     void Enter();
 
     void Exit();
+}
+
+public class IdleState : IEnemyState
+{
+    EnemyRoot enemy;
+    public IdleState(EnemyRoot enemy)
+    {
+        this.enemy = enemy;
+    }
+    public void Enter()
+    {
+        Debug.Log($"[ENEMY] {enemy.EnemyName} has entered Idle State");
+        TurnManager.Instance.OnTurnEnd.AddListener(enemy.Movement.ReturnToIdlePos);
+    }
+
+    public void Exit()
+    {
+        Debug.Log($"[ENEMY] {enemy.EnemyName} is exiting Idle State");
+        TurnManager.Instance.OnTurnEnd.RemoveListener(enemy.Movement.ReturnToIdlePos);
+    }
 }
 
 public class PatrolState : IEnemyState
@@ -50,6 +71,29 @@ public class ChaseState: IEnemyState
     }
 }
 
+public class AlertState : IEnemyState
+{
+    EnemyRoot enemy;
+    public AlertState(EnemyRoot enemy)
+    {
+        this.enemy = enemy;
+    }
+    public void Enter()
+    {
+        Debug.Log($"[ENEMY] {enemy.EnemyName} has entered Alert State");
+        enemy.Sight.sightLight.color = Color.orange;
+        enemy.Visibility.SetGhostVisible();
+    }
+
+    public void Exit()
+    {
+        Debug.Log($"[ENEMY] {enemy.EnemyName} is exiting Alert State");
+        enemy.Sight.sightLight.color = Color.yellow;
+    }
+}
+
+public enum startingState { Idle, Patrol, Alert, Chase }
+
 public class EnemyRoot : MonoBehaviour
 {
     public EnemyMovement Movement { get; private set; }
@@ -92,10 +136,28 @@ public class EnemyRoot : MonoBehaviour
 
     void Start()
     {
-        TransitionTo(new PatrolState(this));
+        switch (initialState)
+        {
+            case startingState.Idle:
+                TransitionTo(new IdleState(this));
+                break;
+            case startingState.Patrol:
+                TransitionTo(new PatrolState(this));
+                break;
+            case startingState.Alert:
+                TransitionTo(new AlertState(this));
+                break;
+            case startingState.Chase:
+                TransitionTo(new ChaseState(this));
+                break;
+        }
     }
 
+    [SerializeField] public startingState initialState;
+
     public IEnemyState State;
+    public UnityEvent OnDie;
+
     public void TransitionTo(IEnemyState newState)
     {
         State?.Exit();

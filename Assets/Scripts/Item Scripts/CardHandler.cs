@@ -11,6 +11,8 @@ public class CardHandler : MonoBehaviour
 
     private bool isFollowingCursor = false;
     public bool resizeForCam;
+    [SerializeField] float scaleFactor;
+    private Vector3 originalScale;
     public Vector2 cardSize => GetComponent<SpriteRenderer>().bounds.size;
     Vector2 offsetFromCursor => new Vector2(cardSize.x / 2, cardSize.y / 2);
     public GameObject CardItem { get; private set; }
@@ -25,6 +27,8 @@ public class CardHandler : MonoBehaviour
     {
         lastItemAmount = itemAmount;
         resizeForCam = resize;
+        originalScale = new Vector3(scaleFactor, scaleFactor, 1);
+        transform.localScale = originalScale;
 
         CardData cardSO = await CardLoader.Instance?.LoadObject<CardData>(itemName);
         if (cardSO == null) Debug.LogError($"[CardHandler] Failed to load CardData for item: {itemName}");
@@ -86,7 +90,7 @@ public class CardHandler : MonoBehaviour
     void ScaleToCamSize()
     {
         float camSize = Camera.main.orthographicSize;
-        float scaleFactor = camSize / 5f;
+        float scaleFactor = 2 * (camSize / 5f);
         transform.localScale = new Vector3(scaleFactor, scaleFactor, 1);
     }
 

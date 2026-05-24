@@ -17,7 +17,11 @@ MonoBehaviour:
     amount: 1
   - itemName: Bow
     amount: 1
-  - itemName: HealthPotion
-    amount: 1
   - itemName: Arrow
     amount: 2
+  - itemName: Familiar
+    amount: 1
+  CharacterName: Kaede
+  MoveSpeed: 10
+  MaxMovementRange: 10
+  Health: 100

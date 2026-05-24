@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,15 +17,23 @@ public class LightManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        sceneLights.AddRange(FindObjectsByType<Light2D>(FindObjectsSortMode.None).Where(l => !l.name.Contains("Global")));
+        StartCoroutine(UpdateLights());
+
+        EnemyManager.Instance.OnEnemyDied.AddListener(QueueLightUpdate);
     }
 
-    /// <summary>
-    /// List of all Light2D components in the scene, excluding the global light. 
-    /// This list is populated in the Awake method by finding all Light2D objects and filtering out the one named "Global Light 2D".
-    /// NOTE: Does not currently update newly created lights after awake.
-    /// </summary>
     public List<Light2D> sceneLights = new();
+
+    void QueueLightUpdate() => StartCoroutine(UpdateLights());
+
+    public IEnumerator UpdateLights()
+    {
+        // Wait 2 frames to ensure lights have been enabled/disabled 
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
+        sceneLights = FindObjectsByType<Light2D>(FindObjectsSortMode.None).Where(l => !l.name.Contains("Global") && !l.name.Contains("Sight")).ToList();
+    }
 
     /// <summary>
     /// Determines if the given position is illuminated by any lights in the scene (Excluding the global light). 
@@ -32,7 +41,6 @@ public class LightManager : MonoBehaviour
     /// </summary>
     /// <param name="position">The position to check for illumination.</param>
     /// <returns>True if the position is illuminated by any light, false otherwise.</returns>
-
     public bool IsObjectInLight(Vector3 position, string excludeTag = null)
     {
         if (sceneLights.Count == 0) { Debug.Log("[LIGHTMANAGER] No lights in sceneLights"); return false; }

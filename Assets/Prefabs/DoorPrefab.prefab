@@ -109,12 +109,12 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -806707715
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 3
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 389333850, guid: bf1e667f8c734a44bbfc58e06e763112, type: 3}
+  m_Sprite: {fileID: 1643709254, guid: 8863245769cf45f4c86262318675815b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -160,7 +160,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1.5}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -181,8 +181,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   IsOpen: 0
-  openSprite: {fileID: 1574618872, guid: bf1e667f8c734a44bbfc58e06e763112, type: 3}
-  closedSprite: {fileID: 389333850, guid: bf1e667f8c734a44bbfc58e06e763112, type: 3}
+  openSprite: {fileID: 22993430, guid: 8863245769cf45f4c86262318675815b, type: 3}
+  closedSprite: {fileID: 1643709254, guid: 8863245769cf45f4c86262318675815b, type: 3}
 --- !u!114 &8145495291885629839
 MonoBehaviour:
   m_ObjectHideFlags: 0

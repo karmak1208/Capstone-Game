@@ -48,6 +48,11 @@ public class EnemyVisibility : MonoBehaviour
     public void CharacterStartedMoving() => isCharacterMoving = true;
     public void CharacterStoppedMoving() => isCharacterMoving = false;
 
+    public void SetGhostVisible()
+    {
+        ghost.transform.position = transform.position;
+        ghost.SetActive(true);
+    }
 
     public void VisibilityUpdate()
     {
@@ -73,6 +78,7 @@ public class EnemyVisibility : MonoBehaviour
             bool ghostVisible = IsVisibleToPlayer(ghost.transform.position);
             if (ghostVisible)
             {
+                Debug.Log($"[ENEMYVISIBILITY] {Root.EnemyName}'s ghost is visible to the player.");
                 ghost.SetActive(false);
             }
         }

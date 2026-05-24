@@ -43,6 +43,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     {
         if (IsDead) return;
         IsDead = true;
+        Root.OnDie.Invoke();
+        EnemyManager.Instance.OnEnemyDied.Invoke();
+        EnemyManager.Instance.RemoveEnemy(Root);
         Destroy(gameObject);
         Debug.Log($"[ENEMY] {Root.EnemyName} has died.");
     }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bee78a5ef1e75f747b0667ba44ff2396, type: 3}
+  m_Name: Familiar
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  itemName: Familiar
+  itemType: Spell
+  cardAction: {fileID: -1500317910491269672, guid: 157b4641c5bb0984e887213fe2974f59, type: 3}
+  damage: 0
+  cooldown: 5
+  range: 0

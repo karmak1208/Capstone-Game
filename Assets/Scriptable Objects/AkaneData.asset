@@ -17,7 +17,9 @@ MonoBehaviour:
     amount: 1
   - itemName: Dagger
     amount: 1
-  - itemName: HealthPotion
-    amount: 1
   - itemName: Arrow
     amount: 3
+  CharacterName: Akane
+  MoveSpeed: 10
+  MaxMovementRange: 15
+  Health: 80

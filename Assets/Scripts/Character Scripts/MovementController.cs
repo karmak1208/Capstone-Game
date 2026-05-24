@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,7 +28,22 @@ public class MovementController : MonoBehaviour, IResettable, IActivatable
     private void Awake()
     {
         Root = GetComponent<CharacterRoot>();
+        Root.OnFinishedLoading.AddListener(Initialize);
         remainingMovementRange = maxMovementRange;
+    }
+
+    void Initialize()
+    {
+        maxMovementRange = Root.Data.MaxMovementRange;
+        moveSpeed = Root.Data.MoveSpeed;
+    }
+    void Start()
+    {
+        moveRangeText = FindObjectsByType<TextMeshProUGUI>(FindObjectsSortMode.None).FirstOrDefault(t => t.gameObject.name == "ActiveMoveRange");
+        if (moveRangeText == null) Debug.LogError($"[MOVEMENT] Failed to find TextMeshProUGUI with name 'ActiveMoveRangeText' in the scene.");
+
+        floormap = FindObjectsByType<Tilemap>(FindObjectsSortMode.None).FirstOrDefault(t => t.gameObject.name == "Floor");
+        if (floormap == null) Debug.LogError($"[MOVEMENT] Failed to find floormap in the scene.");
     }
 
     public void SetActive(bool enabled)
@@ -86,7 +102,7 @@ public class MovementController : MonoBehaviour, IResettable, IActivatable
 
                 yield return null; // Wait one frame, then continue the while loop
             }
-            Root.Highlighter.SetCellVisible(tile, false); // Hide the tile highlight after reaching it
+            Root.Highlighter.ClearTile(tile); // Hide the tile highlight after reaching it
         }
         isMoving = false;
         CharacterManager.Instance.OnCharacterEndedMove.Invoke();

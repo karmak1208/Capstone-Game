@@ -15,6 +15,16 @@ MonoBehaviour:
   m_GroupName: ScriptableObjects
   m_GUID: 96411152de9b8e549b5bff2ed44553a3
   m_SerializeEntries:
+  - m_GUID: 02b2057371462c74386d2abb846383e4
+    m_Address: FamiliarData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 157b4641c5bb0984e887213fe2974f59
+    m_Address: FamiliarPrefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 17907483e44818244887e26981cc3d50
     m_Address: SwordPrefab
     m_ReadOnly: 0
@@ -62,6 +72,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b49c7d5a78c043f40bece38543eda859
     m_Address: HealthPotion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bba1eafe30d3d22469da4a15beac5728
+    m_Address: Familiar
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

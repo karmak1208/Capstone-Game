@@ -5,6 +5,9 @@ using UnityEngine;
 public class ChestController : MonoBehaviour, IInteractable
 {
     public bool IsOpen = false;
+    [SerializeField] private float scale;
+    [SerializeField] private float spacing;
+
 
     public Sprite openSprite;
     public Sprite closedSprite;
@@ -38,15 +41,27 @@ public class ChestController : MonoBehaviour, IInteractable
         IsOpen = true;
     }
 
+    void Update()
+    {
+        if (IsOpen)
+        {
+            for (int i = 0; i < chestItems.Count; i++)
+            {
+                var handler = chestItems[i].GetComponent<CardHandler>();
+                handler.transform.position = GetCardHomePostion(handler, i);
+                handler.transform.localScale = new Vector3(scale, scale, 1);
+            }
+        }
+    }
+
     void CreateCards()
     {
         foreach (string item in chestInventory)
         {
             var card = Instantiate(cardPrefab, transform);
-            float scale = 0.3f;
-            card.transform.localScale = new Vector3(scale, scale, 1);
             var handler = card.GetComponent<CardHandler>();
             handler.Initialize(item, false);
+            card.transform.localScale = new Vector3(scale, scale, 1);
             chestItems.Add(card);
         }
     }
@@ -54,8 +69,8 @@ public class ChestController : MonoBehaviour, IInteractable
     Vector3 GetCardHomePostion(CardHandler handler, int index)
     {
         float cardWidth = handler.cardSize.x;
-        float spacing = cardWidth + 0.1f;
-        float totalWidth = spacing * chestItems.Count - spacing + cardWidth; // span of all cards
+        float _spacing = cardWidth + spacing;
+        float totalWidth = _spacing * chestItems.Count - _spacing + cardWidth; // span of all cards
 
         float verticalOffset = 1;
         Vector3 originWorld = new Vector3(transform.position.x, transform.position.y + verticalOffset);
@@ -63,6 +78,6 @@ public class ChestController : MonoBehaviour, IInteractable
 
         float startX = originWorld.x - totalWidth / 2f;
         float cardCenterOffsetX = cardWidth / 2f; // align by card center
-        return new Vector3(startX + cardCenterOffsetX + spacing * index, originWorld.y);
+        return new Vector3(startX + cardCenterOffsetX + _spacing * index, originWorld.y);
     }
 }
